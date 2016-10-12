@@ -1,0 +1,15 @@
+{
+    "port": 4243,
+    "DEBUG": true,
+	"gatekeeper_secret": "super long string (256+ characters)",
+	"fernet_key": "even longer string (512+ characters)",
+    "db": {
+        "username": "root",
+        "password": "",
+        "host": "127.0.0.1",
+        "name": "bookmark"
+    },
+	"default_redirect": "https://bookmarknovels.com",
+	"max_attempts": 5,
+	"wait_minutes": 5
+}
