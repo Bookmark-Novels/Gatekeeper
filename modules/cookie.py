@@ -15,4 +15,7 @@ class Cookie(object):
             domain='*.{}'.format(secrets.bookmark_host)
         )
 
+    def __contains__(self, name):
+        return self[name] is not None
+
 cookie = Cookie()
