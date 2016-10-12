@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import json
 import uuid
 
 from flask import abort, jsonify, request, session, url_for
@@ -8,7 +9,7 @@ from models.account import Account
 from models.nonce import nonce
 from models.session import Session
 from modules.secure import get_ip
-from secure import encrypt
+from secure import decrypt, encrypt
 
 @app.route('/', methods=['GET'])
 def index():
@@ -19,16 +20,23 @@ def get_session():
     if 'gatekeeper_nonce' not in request.form:
         abort(403)
 
-    if nonce.use(request.form['gatekeeper_nonce']):
-        if 'gatekeeper_session' in session and Session.is_valid(session['gatekeeper_session']):
-            return jsonify({
-                'session_key': encrypt(session['gatekeeper_session'])
-            })
+    try:
+        j = json.loads(decrypt(request.form['gatekeeper_nounce']))
+        nounce = j['nounce']
+        origin = j['origin']
+        
+        if nonce.use(nounce, origin):
+            if 'gatekeeper_session' in session and Session.is_valid(session['gatekeeper_session']):
+                return jsonify({
+                    'session_key': encrypt(session['gatekeeper_session'])
+                })
+            else:
+                return jsonify({
+                    'session_key': None
+                })
         else:
-            return jsonify({
-                'session_key': None
-            })
-    else:
+            abort(403)
+    except:
         abort(403)
 
 @app.route('/login', methods=['GET'. 'POST'])

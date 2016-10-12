@@ -8,12 +8,13 @@ class Nonce(Model):
 
     id = Column(Integer, primary_key=True)
     nonce = Column(String, length=100)
+    origin = Column(String, length=100)
 
     @staticmethod
-    def use(test):
+    def use(test, origin):
         with session_factory() as sess:
             try:
-                n = sess.query(nonce).filter(nonce=test).one()
+                n = sess.query(nonce).filter(nonce=test, origin=origin).one()
                 n.delete()
                 return True
             except NoResultFound:
