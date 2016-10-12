@@ -8,6 +8,7 @@ from app import app, bcrypt
 from models.account import Account
 from models.nonce import nonce
 from models.session import Session
+from modules.cookie import cookie
 from modules.secure import get_ip
 from secure import decrypt, encrypt
 
@@ -26,9 +27,9 @@ def get_session():
         origin = j['origin']
         
         if nonce.use(nounce, origin):
-            if 'gatekeeper_session' in session and Session.is_valid(session['gatekeeper_session']):
+            if 'gatekeeper_session' in cookie and Session.is_valid(cookie['gatekeeper_session']):
                 return jsonify({
-                    'session_key': encrypt(session['gatekeeper_session'])
+                    'session_key': encrypt(cookie['gatekeeper_session'])
                 })
             else:
                 return jsonify({
@@ -41,7 +42,7 @@ def get_session():
 
 @app.route('/login', methods=['GET'. 'POST'])
 def login():
-    if 'gatekeeper_session' in session:
+    if 'gatekeeper_session' in cookie:
         return redirect(url_for('index'))
 
     if 'limit' not in session:
@@ -61,7 +62,7 @@ def login():
             test.ip_address = get_ip()
             test.save()
 
-            session['gatekeeper_session'] = test.session_key
+            cookie['gatekeeper_session'] = test.session_key
             session['limit'] = secrets.max_attempts
 
             if 'next' not in request.args:
