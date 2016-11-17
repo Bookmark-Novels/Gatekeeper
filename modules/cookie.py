@@ -3,7 +3,7 @@ from flask import request, response
 class Cookie(object):
     def __getattr__(self, name):
         if name in request.cookies:
-            return request.cookies['name']
+            return request.cookies[name]
         else:
             return None
     

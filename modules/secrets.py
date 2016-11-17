@@ -2,16 +2,13 @@ import os
 import json
 
 from .object import Object
+from .common import SECRETS_PATH
 
 secrets = Object()
 
-path = os.path.abspath(os.path.join('/bookmark', 'gatekeeper.json'))
-
-with open(path) as f:
+with open(SECRETS_PATH) as f:
     lines = ''.join(f.readlines())
 
     s = json.loads(lines)
 
     secrets.update(s)
-
-del path

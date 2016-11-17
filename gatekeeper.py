@@ -40,7 +40,7 @@ def get_session():
     except:
         abort(403)
 
-@app.route('/login', methods=['GET'. 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'gatekeeper_session' in cookie:
         return redirect(url_for('index'))
@@ -81,3 +81,6 @@ def login():
     else:
         # TODO: CSRF token generation. Check for CSRF on all POST requests.
         return render_template('login.html')
+
+if __name__ == '__main__':
+    app.run(port=secrets.port, debug=secrets.DEBUG)

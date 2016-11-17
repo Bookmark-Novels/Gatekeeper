@@ -3,7 +3,7 @@ import traceback
 from sqlalchemy import Column, Boolean, Integer, String
 from sqlalchemy.orm.exc import NoResultFound
 
-from db import Model, session_factory
+from modules.db import Model, session_factory
 
 class Account(Model):
     __tablename__ = 'bookmark_accounts'
