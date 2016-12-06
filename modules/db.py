@@ -7,7 +7,7 @@ from .secrets import secrets
 
 eng = 'mysql://{username}:{password}@{host}:3307/{name}?charset=utf8'.format(**secrets.db.__dict__)
 engine = create_engine(
-	eng, pool_recycle=600
+    eng, pool_recycle=600
 )
 
 factory = sessionmaker(bind=engine)
@@ -16,18 +16,20 @@ BaseModel = declarative_base()
 
 @contextmanager
 def session_factory():
-	s = Session()
+    s = Session()
 
-	try:
-		yield s
-		s.commit()
-	except:
-		s.rollback()
-		raise
-	finally:
-		s.close()
+    try:
+        yield s
+        s.commit()
+    except:
+        s.rollback()
+        raise
+    finally:
+        s.close()
 
-class Model(BaseModel):
+class Model():
+    __tablename__ = None
+    
     def save(self):
         with session_factory() as sess:
             sess.merge(self)

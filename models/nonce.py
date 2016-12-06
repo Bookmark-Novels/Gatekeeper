@@ -1,14 +1,14 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm.exc import NoResultFound
 
-from db import Model, session_factory
+from modules.db import BaseModel, Model, session_factory
 
-class Nonce(Model):
+class Nonce(BaseModel, Model):
     __tablename__ = 'bookmark_nonces'
 
     id = Column(Integer, primary_key=True)
-    nonce = Column(String, length=100)
-    origin = Column(String, length=100)
+    nonce = Column(String(100))
+    origin = Column(String(100))
 
     @staticmethod
     def use(test, origin):

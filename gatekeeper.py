@@ -2,15 +2,15 @@ from datetime import datetime, timedelta
 import json
 import uuid
 
-from flask import abort, jsonify, request, session, url_for
+from flask import abort, jsonify, redirect, request, session, url_for
 
 from app import app, bcrypt
 from models.account import Account
-from models.nonce import nonce
+from models.nonce import Nonce
 from models.session import Session
-from modules.cookie import cookie
-from modules.secure import get_ip
-from secure import decrypt, encrypt
+from modules.cookie import get_cookie, set_cookie
+from modules.secrets import secrets
+from modules.secure import decrypt, encrypt, get_ip
 
 @app.route('/', methods=['GET'])
 def index():
@@ -27,9 +27,9 @@ def get_session():
         origin = j['origin']
         
         if nonce.use(nounce, origin):
-            if 'gatekeeper_session' in cookie and Session.is_valid(cookie['gatekeeper_session']):
+            if get_cookie('gatekeeper_session') and Session.is_valid(get_cookie('gatekeeper_session')):
                 return jsonify({
-                    'session_key': encrypt(cookie['gatekeeper_session'])
+                    'session_key': encrypt(get_cookie('gatekeeper_session'))
                 })
             else:
                 return jsonify({
@@ -42,7 +42,7 @@ def get_session():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if 'gatekeeper_session' in cookie:
+    if get_cookie('gatekeeper_session'):
         return redirect(url_for('index'))
 
     if 'limit' not in session:
@@ -62,7 +62,7 @@ def login():
             test.ip_address = get_ip()
             test.save()
 
-            cookie['gatekeeper_session'] = test.session_key
+            set_cookie('gatekeeper_session', test.session_key)
             session['limit'] = secrets.max_attempts
 
             if 'next' not in request.args:

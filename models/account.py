@@ -3,17 +3,17 @@ import traceback
 from sqlalchemy import Column, Boolean, Integer, String
 from sqlalchemy.orm.exc import NoResultFound
 
-from modules.db import Model, session_factory
+from modules.db import BaseModel, Model, session_factory
 
-class Account(Model):
+class Account(BaseModel, Model):
     __tablename__ = 'bookmark_accounts'
 
     id = Column(Integer, primary_key=True)
-    email = Column(String, length=255)
-    password = Column(String, length=255)
+    email = Column(String(255))
+    password = Column(String(255))
     verified = Column(Boolean, default=False)
     is_active = Column(Boolean, default=True)
-    last_ip = Column(String, length=100)
+    last_ip = Column(String(100))
 
     is_auth = None
 

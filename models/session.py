@@ -1,15 +1,15 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm.exc import NoResultFound
 
-from db import Model, session_factory
+from modules.db import BaseModel, Model, session_factory
 
-class Session(Model):
+class Session(BaseModel, Model):
     __tablename__ = 'bookmark_sessions'
 
     id = Column(Integer, primary_key=True)
     account_id = Column(Integer)
-    session_key = Column(String, length=255)
-    ip_address = Column(String, length=100)
+    session_key = Column(String(255))
+    ip_address = Column(String(100))
 
     @staticmethod
     def is_valid(key):
