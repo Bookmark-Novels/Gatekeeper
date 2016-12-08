@@ -1,0 +1,29 @@
+{
+  "name": "bookmark-gatekeeper",
+  "version": "1.0.0",
+  "description": "Bookmark's authentication and SSO service.",
+  "main": "gatekeeper.py",
+  "dependencies": {
+    "grunt-contrib-cssmin": "^1.0.2",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-sass": "^1.2.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  },
+  "scripts": {
+    "test": "python gatekeeper.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bookmark-Novels/Gatekeeper.git"
+  },
+  "author": "Bookmark",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bookmark-Novels/Gatekeeper/issues"
+  },
+  "homepage": "https://github.com/Bookmark-Novels/Gatekeeper#readme"
+}

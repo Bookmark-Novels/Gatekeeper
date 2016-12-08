@@ -1,0 +1,134 @@
+$gray: #f1f1f1;
+$dark-gray: darken($gray, 10%);
+$green: #3cbc87;
+$dark-green: darken($green, 10%);
+$link-default: $green;
+$link-hover: $dark-green;
+$body-copy: #000;
+
+$input-border: 2px solid $gray;
+$input-padding: 1rem    ;
+$input-color: #777;
+$input-width: 100%;
+$input-transition: 0.1s all;
+$input-focus-border: 2px solid $green;
+$input-focus-background: #fff;
+$input-focus-color: $link-default;
+
+* {
+    outline: $green;
+}
+
+html, body {
+    font-family: Open Sans;
+    font-size: 14px;
+    color: $body-copy;
+    background: $gray;
+}
+
+a {
+    text-decoration: none;
+    color: $link-default;
+
+    &:hover {
+        text-decoration: none;
+        color: $dark-green;
+    }
+}
+
+p {
+    line-height: 1.5rem;
+    margin: 1.5rem 0px;
+}
+
+button, input, textarea, select {
+    font-family: Open Sans;
+}
+
+input {
+    border-radius: 3px;
+    background: $gray;
+    border:$input-border;
+    outline: none;
+    padding: $input-padding;
+    box-sizing: border-box;
+    color: $input-color;
+    transition: $input-transition;
+
+    &:focus {
+        border: $input-focus-border;
+        background: $input-focus-background;
+        color: $input-focus-color;
+    }
+}
+
+button {
+    padding: 1rem;
+    border: none;
+    background: $gray;
+    border-radius: 3px;
+
+    &:hover {
+        background: $green;
+        cursor: pointer;
+        color: #fff;
+    }
+}
+
+button.btn-primary {
+    background: $green;
+    color: #fff;
+
+    &:hover {
+        background: $dark-green;
+    }
+}
+
+#gatekeeper-login-form-wrapper {
+    max-width: 600px;
+    margin: 20vh auto 0;
+    background: #fff;
+    padding: 3rem;
+
+    h1 {
+        margin-top: 0;
+    }
+}
+
+.gatekeeper-login-form-input-group {
+    display: flex;
+    flex-flow: row;
+    margin-bottom: 1rem;
+
+    label, input {
+        display: inline-block;
+    }
+
+    label {
+        width: 9rem;
+        flex-grow: 0;
+        padding: 1rem;
+        box-sizing: border-box;
+        text-align: right;
+    }
+
+    input {
+        flex-grow: 1;
+    }
+}
+
+#gatekeeper-login-form-buttons {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-end;
+
+    * {
+        margin-left: 1rem;
+    }
+}
+
+.vertical-align {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}

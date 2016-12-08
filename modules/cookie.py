@@ -24,11 +24,11 @@ def set_cookie(key, val):
 
 def export_cookie_store(response):
     global __cookies__
-    
+
     for key in __cookies__.keys():
         response.set_cookie(
             key,
-            value=self.__cookies__[key],
+            value=__cookies__[key],
             max_age=60*60*24*365,
             domain='*.{}'.format(secrets.bookmark_host)
         )

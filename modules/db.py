@@ -29,7 +29,7 @@ def session_factory():
 
 class Model():
     __tablename__ = None
-    
+
     def save(self):
         with session_factory() as sess:
             sess.merge(self)

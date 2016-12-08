@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import json
 import uuid
 
-from flask import abort, jsonify, redirect, request, session, url_for
+from flask import abort, jsonify, redirect, render_template, request, session, url_for
 
 from app import app, bcrypt
 from models.account import Account
@@ -14,7 +14,7 @@ from modules.secure import decrypt, encrypt, get_ip
 
 @app.route('/', methods=['GET'])
 def index():
-    return redirect(secrets.default_redirect)
+    return render_template('/index.html')
 
 @app.route('/session', methods=['POST'])
 def get_session():
@@ -25,7 +25,7 @@ def get_session():
         j = json.loads(decrypt(request.form['gatekeeper_nounce']))
         nounce = j['nounce']
         origin = j['origin']
-        
+
         if nonce.use(nounce, origin):
             if get_cookie('gatekeeper_session') and Session.is_valid(get_cookie('gatekeeper_session')):
                 return jsonify({
@@ -81,6 +81,10 @@ def login():
     else:
         # TODO: CSRF token generation. Check for CSRF on all POST requests.
         return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return 'placeholder'
 
 if __name__ == '__main__':
     app.run(port=secrets.port, debug=secrets.DEBUG)

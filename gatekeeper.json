@@ -11,5 +11,6 @@
     },
     "default_redirect": "https://bookmarknovels.com",
     "max_attempts": 5,
-    "wait_minutes": 5
+    "wait_minutes": 5,
+    "bookmark_host": "localhost"
 }
