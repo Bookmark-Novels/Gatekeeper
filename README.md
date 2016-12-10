@@ -12,11 +12,4 @@ Merged branches will be deleted every 2-3 days after merging.
 
 ## Getting Started
 
-Dependencies: Python 3.4+, everything in `requirements.txt`
-
-```
-pyvenv venv
-source venv/bin/activate
-pip install -r requirements.txt
-# Exit via ctrl+D
-```
+See [this page](https://github.com/Bookmark-Novels/Gatekeeper/wiki/Running-Gatekeeper).
