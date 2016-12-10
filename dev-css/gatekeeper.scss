@@ -61,6 +61,12 @@ input {
     }
 }
 
+input[type=checkbox], input[type=radio] {
+    vertical-align: middle;
+    position: relative;
+    bottom: 1px;
+}
+
 button {
     padding: 1rem;
     border: none;
@@ -121,7 +127,7 @@ button.btn-primary {
     flex-flow: row;
     justify-content: flex-end;
 
-    * {
+    & > * {
         margin-left: 1rem;
     }
 }

@@ -23,9 +23,15 @@
                 </span>
                 <div id="gatekeeper-login-form-buttons">
                     <span class="vertical-align">
-                        <a href="{{ url_for('register') }}">Create Account</a>
+                        <span>
+                            <input type="checkbox" name="remember" id="remember" />
+                            <label for="remember">Remember Me</label>
+                        </span>
                     </span>
                     <button class="btn-primary" type="submit" name="login">Log in</button>
+                </div>
+                <div id="gatekeeper-login-form-links">
+                    <a href="{{ url_for('register') }}">Create Account</a>
                 </div>
             </form>
         </div>

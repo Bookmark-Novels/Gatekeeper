@@ -22,14 +22,19 @@ def get_cookie(cookie):
     else:
         return None
 
-def set_cookie(key, val, max_age=60*60*24*365, domain='*.{}'.format(secrets.bookmark_host)):
+# Cookies set by applications should always be HTTP only. In the event
+# that some JavaScript needs to read a cookie, the backend may provide
+# cookie values on an as-needed basis.
+def set_cookie(key, val, max_age=60*60*24*365, domain='*.{}'.format(secrets.bookmark_host), secure=True, httponly=True):
     global __cookies__
 
     __cookies__[key] = {
         'key': key,
         'value': val,
         'max_age': max_age,
-        'doamin': domain
+        'doamin': domain,
+        'secure': secure,
+        'httponly': httponly
     }
 
 def export_cookie_store(response):
