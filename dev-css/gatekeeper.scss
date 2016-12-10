@@ -1,5 +1,6 @@
 $gray: #f1f1f1;
 $dark-gray: darken($gray, 10%);
+$darker-gray: darken($gray, 20%);
 $green: #3cbc87;
 $dark-green: darken($green, 10%);
 $link-default: $green;
@@ -122,10 +123,21 @@ button.btn-primary {
     }
 }
 
+#gatekeeper-login-form-bottom {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+#gatekeeper-login-form-links{
+    flex-grow: 0;
+}
+
 #gatekeeper-login-form-buttons {
     display: flex;
     flex-flow: row;
     justify-content: flex-end;
+    flex-grow: 1;
 
     & > * {
         margin-left: 1rem;
@@ -136,4 +148,8 @@ button.btn-primary {
     display: flex;
     flex-flow: column;
     justify-content: center;
+}
+
+.gray {
+    color: $darker-gray;
 }

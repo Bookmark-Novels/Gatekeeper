@@ -86,5 +86,9 @@ def login():
 def register():
     return 'placeholder'
 
+@app.route('/forgot-password')
+def forgot_password():
+    return 'placeholder'
+
 if __name__ == '__main__':
     app.run(port=secrets.port, debug=secrets.DEBUG)
