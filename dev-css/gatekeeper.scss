@@ -7,7 +7,7 @@ $link-hover: $dark-green;
 $body-copy: #000;
 
 $input-border: 2px solid $gray;
-$input-padding: 1rem    ;
+$input-padding: 1rem;
 $input-color: #777;
 $input-width: 100%;
 $input-transition: 0.1s all;
@@ -58,7 +58,6 @@ input {
     &:focus {
         border: $input-focus-border;
         background: $input-focus-background;
-        color: $input-focus-color;
     }
 }
 
