@@ -13,5 +13,6 @@
     "login_redirect": "https://bookmarknovels.com",
     "max_attempts": 5,
     "wait_minutes": 5,
-    "bookmark_host": "localhost"
+    "bookmark_host": "localhost",
+    "gatekeeper_host": "https://auth.bookmarknovels.com"
 }
