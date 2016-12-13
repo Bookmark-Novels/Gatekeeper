@@ -1,0 +1,43 @@
+{% extends 'modal_template.html' %}
+
+{% block title %}
+Bookmark Registration
+{% endblock %}
+
+{% block content %}
+<form id="gatekeeper-form">
+    <header>
+        <h1>Bookmark Registration</h1>
+    </header>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <span class="gatekeeper-form-input-group">
+        <label>Display Name</label>
+        <input type="name" name="name" placeholder="Your Name Here" required />
+    </span>
+    <span class="gatekeeper-form-input-group">
+        <label>Email Address</label>
+        <input type="email" name="email" placeholder="bookmark@novels.com" required />
+    </span>
+    <span class="gatekeeper-form-input-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Super Secret Password" required />
+    </span>
+    <span class="gatekeeper-form-input-group">
+        <label>Confirm Password</label>
+        <input type="password" name="password-verify" placeholder="Super Secret Password" required />
+    </span>
+    <span class="gatekeeper-form-input-check">
+        <input type="checkbox" name="tos-accept" required />
+        <label>I have read and agree to the Bookmark <a href="https://bookmarknovels.com/tos">terms of service</a>.</label>
+    </span>
+        <span class="gatekeeper-form-input-check">
+        <input type="checkbox" name="pp-accept" required />
+        <label>I have read and acknowledge the Bookmark <a href="https://bookmarknovels.com/privacy">privacy policy</a>.</label>
+    </span>
+    <div id="gatekeeper-form-bottom">
+        <div id="gatekeeper-form-buttons">
+            <button class="btn-primary" type="submit" name="login">Finish Registration</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -84,11 +84,8 @@ def login():
 
 @app.route('/register')
 def register():
-    return 'placeholder'
+    return render_template('register.html')
 
 @app.route('/forgot-password')
 def forgot_password():
     return 'placeholder'
-
-if __name__ == '__main__':
-    app.run(port=secrets.port, debug=secrets.DEBUG)

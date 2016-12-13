@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans:400|Montserrat:700" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/gatekeeper.min.css') }}" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="gatekeeper-modal-wrapper">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

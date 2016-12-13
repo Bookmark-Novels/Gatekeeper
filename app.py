@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_wtf.csrf import CsrfProtect
 
 from models.account import Account
 from modules.cookie import init_cookie_store, export_cookie_store
@@ -26,3 +27,9 @@ def pre_request():
 def post_request(response):
     export_cookie_store(response)
     return response
+
+from gatekeeper import *
+
+if __name__ == '__main__':
+    CsrfProtect(app)
+    app.run(port=secrets.port, debug=secrets.DEBUG)

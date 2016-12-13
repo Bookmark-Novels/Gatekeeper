@@ -90,9 +90,9 @@ button.btn-primary {
     }
 }
 
-#gatekeeper-login-form-wrapper {
+#gatekeeper-modal-wrapper {
     max-width: 600px;
-    margin: 20vh auto 0;
+    margin: 10rem auto 0;
     background: #fff;
     padding: 3rem;
 
@@ -101,7 +101,7 @@ button.btn-primary {
     }
 }
 
-.gatekeeper-login-form-input-group {
+.gatekeeper-form-input-group {
     display: flex;
     flex-flow: row;
     margin-bottom: 1rem;
@@ -123,17 +123,17 @@ button.btn-primary {
     }
 }
 
-#gatekeeper-login-form-bottom {
+#gatekeeper-form-bottom {
     display: flex;
     flex-flow: row;
     justify-content: space-between;
 }
 
-#gatekeeper-login-form-links{
+#gatekeeper-form-links{
     flex-grow: 0;
 }
 
-#gatekeeper-login-form-buttons {
+#gatekeeper-form-buttons {
     display: flex;
     flex-flow: row;
     justify-content: flex-end;
@@ -142,6 +142,11 @@ button.btn-primary {
     & > * {
         margin-left: 1rem;
     }
+}
+
+.gatekeeper-form-input-check {
+    display: block;
+    margin-bottom: 1rem;
 }
 
 .vertical-align {

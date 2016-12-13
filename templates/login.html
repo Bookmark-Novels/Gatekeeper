@@ -1,45 +1,40 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Bookmark Login</title>
-        <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Open+Sans:400|Montserrat:700" rel="stylesheet">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet" />
-        <link href="{{ url_for('static', filename='css/gatekeeper.min.css') }}" rel="stylesheet" />
-    </head>
-    <body>
-        <div id="gatekeeper-login-form-wrapper">
-            <form id="gatekeeper-login-form">
-                <header>
-                    <h1>Bookmark Novels</h1>
-                </header>
-                <span class="gatekeeper-login-form-input-group">
-                    <label>Email Address</label>
-                    <input type="email" name="email" id="gatekeeper-login-form-email" placeholder="bookmark@novels.com" required />
-                </span>
-                <span class="gatekeeper-login-form-input-group">
-                    <label>Password</label>
-                    <input type="password" name="password" id="gatekeeper-login-form-password" placeholder="Super Secret Password" required />
-                </span>
-                <div id="gatekeeper-login-form-bottom">
-                    <div id="gatekeeper-login-form-links" class="vertical-align">
-                        <span>
-                            <a href="{{ url_for('register') }}">Create Account</a>
-                            <span class="gray">/</span>
-                            <a href="{{ url_for('forgot_password' )}}">Forgot Password</a>
-                        </span>
-                    </div>
-                    <div id="gatekeeper-login-form-buttons">
-                        <span class="vertical-align">
-                            <span>
-                                <input type="checkbox" name="remember" id="remember" />
-                                <label for="remember">Remember Me</label>
-                            </span>
-                        </span>
-                        <button class="btn-primary" type="submit" name="login">Log in</button>
-                    </div>
-                </div>
-            </form>
+{% extends 'modal_template.html' %}
+
+{% block title %}
+Bookmark login
+{% endblock %}
+
+{% block content %}
+<form id="gatekeeper-login-form">
+    <header>
+        <h1>Bookmark Novels</h1>
+    </header>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <span class="gatekeeper-login-form-input-group">
+        <label>Email Address</label>
+        <input type="email" name="email" id="gatekeeper-login-form-email" placeholder="bookmark@novels.com" required />
+    </span>
+    <span class="gatekeeper-login-form-input-group">
+        <label>Password</label>
+        <input type="password" name="password" id="gatekeeper-login-form-password" placeholder="Super Secret Password" required />
+    </span>
+    <div id="gatekeeper-login-form-bottom">
+        <div id="gatekeeper-login-form-links" class="vertical-align">
+            <span>
+                <a href="{{ url_for('register') }}">Create Account</a>
+                <span class="gray">/</span>
+                <a href="{{ url_for('forgot_password' )}}">Forgot Password</a>
+            </span>
         </div>
-    </body>
-</html>
+        <div id="gatekeeper-login-form-buttons">
+            <span class="vertical-align">
+                <span>
+                    <input type="checkbox" name="remember" id="remember" />
+                    <label for="remember">Remember Me</label>
+                </span>
+            </span>
+            <button class="btn-primary" type="submit" name="login">Log in</button>
+        </div>
+    </div>
+</form>
+{% endblock %}
