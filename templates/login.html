@@ -5,28 +5,28 @@ Bookmark login
 {% endblock %}
 
 {% block content %}
-<form id="gatekeeper-login-form">
+<form method="POST" id="gatekeeper-form">
     <header>
         <h1>Bookmark Novels</h1>
     </header>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-    <span class="gatekeeper-login-form-input-group">
+    <span class="gatekeeper-form-input-group">
         <label>Email Address</label>
-        <input type="email" name="email" id="gatekeeper-login-form-email" placeholder="bookmark@novels.com" required />
+        <input type="email" name="email" id="gatekeeper-form-email" placeholder="bookmark@novels.com" required />
     </span>
-    <span class="gatekeeper-login-form-input-group">
+    <span class="gatekeeper-form-input-group">
         <label>Password</label>
-        <input type="password" name="password" id="gatekeeper-login-form-password" placeholder="Super Secret Password" required />
+        <input type="password" name="password" id="gatekeeper-form-password" placeholder="Super Secret Password" required />
     </span>
-    <div id="gatekeeper-login-form-bottom">
-        <div id="gatekeeper-login-form-links" class="vertical-align">
+    <div id="gatekeeper-form-bottom">
+        <div id="gatekeeper-form-links" class="vertical-align">
             <span>
                 <a href="{{ url_for('register') }}">Create Account</a>
                 <span class="gray">/</span>
                 <a href="{{ url_for('forgot_password' )}}">Forgot Password</a>
             </span>
         </div>
-        <div id="gatekeeper-login-form-buttons">
+        <div id="gatekeeper-form-buttons">
             <span class="vertical-align">
                 <span>
                     <input type="checkbox" name="remember" id="remember" />

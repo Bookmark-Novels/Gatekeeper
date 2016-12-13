@@ -7,9 +7,10 @@
         "username": "root",
         "password": "",
         "host": "127.0.0.1",
+        "port": 3306,
         "name": "bookmark"
     },
-    "default_redirect": "https://bookmarknovels.com",
+    "login_redirect": "https://bookmarknovels.com",
     "max_attempts": 5,
     "wait_minutes": 5,
     "bookmark_host": "localhost"

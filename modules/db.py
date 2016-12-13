@@ -5,7 +5,7 @@ from contextlib import contextmanager
 
 from .secrets import secrets
 
-eng = 'mysql://{username}:{password}@{host}:3307/{name}?charset=utf8'.format(**secrets.db.__dict__)
+eng = 'mysql://{username}:{password}@{host}:{port}/{name}?charset=utf8'.format(**secrets.db.__dict__)
 engine = create_engine(
     eng, pool_recycle=600
 )

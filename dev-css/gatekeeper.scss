@@ -11,7 +11,7 @@ $input-border: 2px solid $gray;
 $input-padding: 1rem;
 $input-color: #777;
 $input-width: 100%;
-$input-transition: 0.1s all;
+$input-transition: 0.1s background, 0.1s border, 0.1s color;
 $input-focus-border: 2px solid $green;
 $input-focus-background: #fff;
 $input-focus-color: $link-default;

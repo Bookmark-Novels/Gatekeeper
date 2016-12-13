@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import json
 import uuid
 
-from flask import abort, jsonify, redirect, render_template, request, session, url_for
+from flask import abort, flash, jsonify, redirect, render_template, request, session, url_for
 
 from app import app, bcrypt
 from models.account import Account
@@ -55,9 +55,9 @@ def login():
                     'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
                 )
 
-        test = Account(email=request.form.email, password=bcrypt.hash_password(request.form.password))
+        test = Account.from_email(request.form['email'])
 
-        if test.is_authenticated():
+        if test is not None and bcrypt.check_password_hash(test.password, request.form['password']):
             test.session_key = uuid.uuid4()
             test.ip_address = get_ip()
             test.save()
@@ -66,7 +66,7 @@ def login():
             session['limit'] = secrets.max_attempts
 
             if 'next' not in request.args:
-                return redirect(secrets.default_redirect)
+                return redirect(secrets.login_redirect)
             else:
                 return redirect(request.args['next'])
         else:
@@ -77,10 +77,8 @@ def login():
                     session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=secrets.wait_minutes)
 
             flash('Invalid email or password specified.')
-            return render_template('index.html')
-    else:
-        # TODO: CSRF token generation. Check for CSRF on all POST requests.
-        return render_template('login.html')
+
+    return render_template('login.html')
 
 @app.route('/register')
 def register():
@@ -88,4 +86,4 @@ def register():
 
 @app.route('/forgot-password')
 def forgot_password():
-    return 'placeholder'
+    return render_template('forgot_password.html')

@@ -55,8 +55,22 @@ class Account(BaseModel, Model):
                     Account.id==id
                 ).one()
 
-                session.expunge(forum)
+                session.expunge(account)
 
-                return forum
+                return account
+            except NoResultFound:
+                return None
+
+    @staticmethod
+    def from_email(email):
+        with session_factory() as session:
+            try:
+                account = session.query(Account).filter(
+                    Account.email==email
+                ).one()
+
+                session.expunge(account)
+
+                return account
             except NoResultFound:
                 return None
