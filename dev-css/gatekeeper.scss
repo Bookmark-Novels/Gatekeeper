@@ -149,15 +149,9 @@ button.btn-primary {
     }
 }
 
-#gatekeeper-form-bottom > *:first-child {
-    flex-grow: 0;
-}
-
 #gatekeeper-form-buttons {
-    display: flex;
-    flex-flow: row;
-    justify-content: flex-end;
     flex-grow: 1;
+    justify-content: flex-end;
 
     & > * {
         margin-left: 1rem;
@@ -171,8 +165,8 @@ button.btn-primary {
 
 .vertical-align {
     display: flex;
-    flex-flow: column;
-    justify-content: center;
+    flex-flow: row;
+    align-items: center;
 }
 
 .gray {
