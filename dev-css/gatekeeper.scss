@@ -26,6 +26,7 @@ html, body {
     font-size: 14px;
     color: $body-copy;
     background: $gray;
+    line-height: 1.4rem;
 }
 
 a {
@@ -205,4 +206,8 @@ button.btn-primary {
 
 .small {
     font-size: 0.9rem;
+}
+
+#bookmark-registration-agreement {
+    border-right: 1px solid $dark-gray;
 }
