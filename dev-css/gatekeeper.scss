@@ -1,6 +1,7 @@
 $gray: #f1f1f1;
 $dark-gray: darken($gray, 10%);
 $darker-gray: darken($gray, 20%);
+$darkest-gray: darken($gray, 60%);
 $green: #3cbc87;
 $dark-green: darken($green, 10%);
 $link-default: $green;
@@ -95,6 +96,23 @@ button.btn-primary {
     &:hover {
         background: $dark-green;
     }
+}
+
+#gatekeeper-top-bar {
+    background: #fff;
+    padding: 1rem;
+
+    a {
+        color: $body-copy;
+    }
+
+    a:hover {
+        color: $darkest-gray;
+    }
+}
+
+#bookmark-logo {
+    font-weight: 700;
 }
 
 #gatekeeper-modal-wrapper {

@@ -7,12 +7,12 @@ from flask_wtf.csrf import CsrfProtect
 
 from models.account import Account
 from modules.cookie import init_cookie_store, export_cookie_store
-from modules.secrets import secrets
+from modules.secrets import hosts, secrets
 
 app = Flask('bookmark')
 
 app.secret_key = secrets.gatekeeper_secret
-app.server_name = secrets.gatekeeper_host
+app.server_name = hosts.gatekeeper
 app.session_cookie_secure = True
 
 bcrypt = Bcrypt(app)
@@ -22,7 +22,9 @@ login_manager.init_app(app)
 
 @app.context_processor
 def injections():
-    to_inject = {}
+    to_inject = {
+        'hosts': hosts
+    }
     
     if secrets.DEBUG:
         to_inject['csrf_token'] = lambda: 0
@@ -48,5 +50,4 @@ def post_request(response):
 from gatekeeper import *
 
 if __name__ == '__main__':
-
     app.run(port=secrets.port, debug=secrets.DEBUG)

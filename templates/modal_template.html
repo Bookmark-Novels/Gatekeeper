@@ -8,6 +8,13 @@
         <link href="{{ url_for('static', filename='css/gatekeeper.min.css') }}" rel="stylesheet" />
     </head>
     <body>
+        <aside id="gatekeeper-top-bar">
+            <span id="bookmark-logo">
+                <a href="{{ hosts.bookmark }}">
+                Bookmark Novels
+                </a>
+            </span>
+        </aside>
         <div id="gatekeeper-modal-wrapper">
             {% block content %}{% endblock %}
         </div>

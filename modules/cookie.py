@@ -1,6 +1,6 @@
 from flask import request
 
-from modules.secrets import secrets
+from modules.secrets import hosts
 
 __existing_cookies__ = {}
 __cookies__ = {}
@@ -25,7 +25,7 @@ def get_cookie(cookie):
 # Cookies set by applications should always be HTTP only. In the event
 # that some JavaScript needs to read a cookie, the backend may provide
 # cookie values on an as-needed basis.
-def set_cookie(key, val, max_age=60*60*24*365, domain='*.{}'.format(secrets.bookmark_host), secure=True, httponly=True):
+def set_cookie(key, val, max_age=60*60*24*365, domain='*.{}'.format(hosts.bookmark), secure=True, httponly=True):
     global __cookies__
 
     __cookies__[key] = {
