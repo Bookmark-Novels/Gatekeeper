@@ -40,8 +40,8 @@ def get_session():
     except:
         abort(403)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/signin', methods=['GET', 'POST'])
+def signin():
     if get_cookie('gatekeeper_session'):
         return redirect(url_for('index'))
 
@@ -66,7 +66,7 @@ def login():
             session['limit'] = secrets.max_attempts
 
             if 'next' not in request.args:
-                return redirect(secrets.login_redirect)
+                return redirect(secrets.signin_redirect)
             else:
                 return redirect(request.args['next'])
         else:
@@ -78,11 +78,11 @@ def login():
 
             flash('Invalid email or password specified.')
 
-    return render_template('login.html')
+    return render_template('signin.html')
 
-@app.route('/register')
-def register():
-    return render_template('register.html')
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
 
 @app.route('/forgot-password')
 def forgot_password():

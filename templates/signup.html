@@ -1,13 +1,13 @@
 {% extends 'modal_template.html' %}
 
 {% block title %}
-Bookmark Registration
+Bookmark Sign Up
 {% endblock %}
 
 {% block content %}
 <form method="POST" id="gatekeeper-form">
     <header>
-        <h1>Bookmark Registration</h1>
+        <h1>Create a Bookmark Account</h1>
     </header>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <span class="gatekeeper-form-input-group">
@@ -25,11 +25,11 @@ Bookmark Registration
     <div id="gatekeeper-form-bottom">
         <div class="small">
             <hr />
-            By clicking "Finish Registration", I acknowledge and accept the Bookmark <a href="https://bookmarknovels.com/tos">terms of service</a> and <a href="https://bookmarknovels.com/privacy">privacy policy</a>.
+            By clicking "Create Account", I acknowledge and accept the Bookmark <a href="https://bookmarknovels.com/tos">terms of service</a> and <a href="https://bookmarknovels.com/privacy">privacy policy</a>.
             <hr />
         </div>
         <div id="gatekeeper-form-buttons" class="vertical-align">
-            <button class="btn-primary" type="submit" name="register">Finish&nbsp;Registration</button>
+            <button class="btn-primary" type="submit" name="register">Createh&nbsp;Account</button>
         </div>
     </div>
 </form>

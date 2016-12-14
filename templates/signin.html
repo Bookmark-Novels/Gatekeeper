@@ -1,13 +1,13 @@
 {% extends 'modal_template.html' %}
 
 {% block title %}
-Bookmark login
+Bookmark Sign In
 {% endblock %}
 
 {% block content %}
 <form method="POST" id="gatekeeper-form">
     <header>
-        <h1>Login to Bookmark</h1>
+        <h1>Sign in to Bookmark</h1>
     </header>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
     <span class="gatekeeper-form-input-group">
@@ -21,7 +21,7 @@ Bookmark login
     <div id="gatekeeper-form-bottom">
         <div id="gatekeeper-form-links" class="vertical-align">
             <span>
-                <a href="{{ url_for('register') }}">Create Account</a>
+                <a href="{{ url_for('signup') }}">Create Account</a>
                 <span class="gray">/</span>
                 <a href="{{ url_for('forgot_password' )}}">Forgot Password</a>
             </span>
@@ -33,7 +33,7 @@ Bookmark login
                     <label for="remember">Remember Me</label>
                 </span>
             </span>
-            <button class="btn-primary" type="submit" name="login">Log in</button>
+            <button class="btn-primary" type="submit" name="login">Sign In in</button>
         </div>
     </div>
 </form>
