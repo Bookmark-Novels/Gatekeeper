@@ -100,10 +100,14 @@ button.btn-primary {
 
 #gatekeeper-top-bar {
     background: #fff;
-    padding: 1rem;
+    display: flex;
+    flex-flow: row;
 
     a {
         color: $body-copy;
+        padding: 1rem;
+        display: inline-block;
+        border-right: 1px solid $gray;
     }
 
     a:hover {

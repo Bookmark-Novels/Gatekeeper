@@ -14,6 +14,15 @@
                 Bookmark Novels
                 </a>
             </span>
+            <a href="{{ url_for('login') }}">
+                <span class="fa fa-sign-in"></span>
+                Log In
+            </a>
+            <a href="{{ url_for('register') }}">
+                <span class="fa fa-user-plus"></span>
+                Register
+            </a>
+            </span>
         </aside>
         <div id="gatekeeper-modal-wrapper">
             {% block content %}{% endblock %}
