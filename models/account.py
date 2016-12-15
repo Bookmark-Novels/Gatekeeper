@@ -4,6 +4,8 @@ from sqlalchemy import Column, Boolean, Integer, String
 from sqlalchemy.orm.exc import NoResultFound
 
 from modules.db import BaseModel, Model, session_factory
+from modules.secrets import secrets
+from modules.secure import encrypt, decrypt
 
 class Account(BaseModel, Model):
     __tablename__ = 'bookmark_accounts'
@@ -64,6 +66,8 @@ class Account(BaseModel, Model):
     @staticmethod
     def from_email(email):
         with session_factory() as session:
+            email = encrypt(email, secrets.fernet_key)
+            
             try:
                 account = session.query(Account).filter(
                     Account.email==email

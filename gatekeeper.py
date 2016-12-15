@@ -22,14 +22,14 @@ def get_session():
         abort(403)
 
     try:
-        j = json.loads(decrypt(request.form['gatekeeper_nounce']))
+        j = json.loads(decrypt(request.form['gatekeeper_nounce'], secrets.fernet_key))
         nounce = j['nounce']
         origin = j['origin']
 
         if nonce.use(nounce, origin):
             if get_cookie('gatekeeper_session') and Session.is_valid(get_cookie('gatekeeper_session')):
                 return jsonify({
-                    'session_key': encrypt(get_cookie('gatekeeper_session'))
+                    'session_key': encrypt(get_cookie('gatekeeper_session'), secrets.fernet_key)
                 })
             else:
                 return jsonify({
