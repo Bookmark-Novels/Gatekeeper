@@ -2,7 +2,7 @@ import React from 'react';
 
 export class NavBar extends React.Component {
     render(){
-        return {
+        return (
             <aside id="gatekeeper-top-bar">
                 <span id="bookmark-logo">
                     <Link to={{ pathname: gatekeeper.bookmark_home }}>
@@ -19,6 +19,6 @@ export class NavBar extends React.Component {
                 </Link>
                 </span>
             </aside>
-        };
+        );
     }
 }

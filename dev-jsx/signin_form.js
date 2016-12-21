@@ -9,12 +9,12 @@ export class SignInForm extends React.Component {
     }
 
     render(){
-        return {
+        return (
             <form method="POST" id="gatekeeper-form">
                 <header>
                     <h1>Sign in to Bookmark</h1>
                 </header>
-                <input type="hidden" name="csrf_token" value=gatekeeper.csrf_token />
+                <input type="hidden" name="csrf_token" value={ gatekeeper.csrf_token } />
                 <TextInput name="email" id="gatekeeper-form-email" placeholder="email@bookmarknovels.com" />
                 <PasswordInput name="password" id="gatekeeper-form-password" placeholder="Super Secret Password" />
                 <div id="gatekeeper-form-bottom">
@@ -33,6 +33,6 @@ export class SignInForm extends React.Component {
                     </div>
                 </div>
             </form>
-        };
+        );
     }
 }
