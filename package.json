@@ -10,7 +10,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-sass": "^1.2.1",
     "react": "^15.4.1",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
+    "react-router": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

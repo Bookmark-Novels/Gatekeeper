@@ -17,7 +17,6 @@ export class NavBar extends React.Component {
                     <span class="fa fa-user-plus"></span>
                     Create Account
                 </Link>
-                </span>
             </aside>
         );
     }

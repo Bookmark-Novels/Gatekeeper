@@ -15,31 +15,10 @@ export class Input extends React.Component {
 
     render(){
         return (
-            <span class="gatekeeper-form-input-group">
+            <span className="gatekeeper-form-input-group">
                 <label>{this.state.label}</label>
                 <input type={this.state.type} value={this.state.value} name={this.state.name} id={this.state.id} placeholder={this.state.placeholder} required />
             </span>
         );
-    }
-}
-
-export class TextInput extends Input {
-    constructor(props){
-        props.type = 'text';
-        super(props);
-    }
-}
-
-export class PasswordInput extends Input {
-    constructor(props){
-        props.type = 'password';
-        super(props);
-    }
-}
-
-export class EmailInput extends Input {
-    constructor(props){
-        props.type = 'email';
-        super(props);
     }
 }
