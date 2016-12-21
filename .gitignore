@@ -3,3 +3,6 @@ __pycache__/*
 venv/*
 node_modules/*
 static/*
+typings/*
+staging/*
+dev-jsx/jsx.js

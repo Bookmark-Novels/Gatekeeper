@@ -16,7 +16,7 @@ module.exports = function(grunt){
         uglify: {
             everything: {
                 files: {
-                    'static/js/gatekeeper.min.js': ['dev-js/gatekeeper.js']
+                    'static/js/gatekeeper.min.js': ['staging/js/jsx.js', 'dev-js/gatekeeper.js']
                 }
             }
         },
@@ -32,6 +32,17 @@ module.exports = function(grunt){
                 }
             }
         },
+        browserify: {
+            dist: {
+                options: {
+                    plugins: ['transform-react-jsx'],
+                    transform: [['babelify', {presets: ['es2015', 'react'], global: true}]],
+                    presets: ['es2015', 'react']
+                },
+                src: ['dev-jsx/gatekeeper.js'],
+                dest: 'staging/js/jsx.js'
+            }
+        },
         watch: {
             sass: {
                 files: 'dev-css/**/*.scss',
@@ -40,15 +51,20 @@ module.exports = function(grunt){
             js: {
                 files: 'dev-js/**/*.js',
                 tasks: ['jshint', 'uglify']
+            },
+            browserify: {
+                files: ['dev-jsx/**/*.js'],
+                tasks: ['browserify',  'uglify']
             }
         }
     });
 
+    grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['clean', 'jshint', 'uglify', 'sass']);
+    grunt.registerTask('default', ['clean', 'jshint', 'browserify', 'uglify', 'sass']);
 };

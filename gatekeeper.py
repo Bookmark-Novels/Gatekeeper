@@ -152,3 +152,7 @@ def signup():
 @app.route('/forgot-password')
 def forgot_password():
     return render_template('forgot_password.html')
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
