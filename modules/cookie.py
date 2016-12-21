@@ -1,6 +1,7 @@
 from flask import request
 
-from modules.secrets import hosts
+from modules.secrets import hosts, keyring
+from modules.secure import encrypt, decrypt
 
 __existing_cookies__ = {}
 __cookies__ = {}
@@ -18,7 +19,13 @@ def get_cookie(cookie):
     if cookie in __cookies__:
         return __cookies__[cookie]['value']
     elif cookie in __existing_cookies__:
-        return __existing_cookies__[cookie]
+        val = __existing_cookies__[cookie]
+
+        if val.startswith('bkm|'):
+            val = val[4:]
+            val = decrypt(val, keyring.gatekeeper_secret)
+
+        return val
     else:
         return None
 
@@ -30,7 +37,7 @@ def set_cookie(key, val, max_age=60*60*24*365, domain='*.{}'.format(hosts.bookma
 
     __cookies__[key] = {
         'key': key,
-        'value': val,
+        'value': 'bkmk|' + encrypt(val, keyring.gatekeeper_secret),
         'max_age': max_age,
         'doamin': domain,
         'secure': secure,

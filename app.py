@@ -1,13 +1,21 @@
 import os
 
-from flask import Flask
+import redis
+
+from flask import Flask, session
 from flask_bcrypt import Bcrypt
+from flask_kvsession import KVSessionExtension
 from flask_login import LoginManager
 from flask_wtf.csrf import CsrfProtect
+from simplekv.decorator import PrefixDecorator
+from simplekv.memory.redisstore import RedisStore
 
 from models.account import Account
 from modules.cookie import init_cookie_store, export_cookie_store
 from modules.secrets import hosts, secrets
+
+store = RedisStore(redis.StrictRedis(host=hosts.redis))
+store = PrefixDecorator('gatekeeper_', store)
 
 app = Flask('bookmark')
 
@@ -17,6 +25,8 @@ app.session_cookie_secure = True
 
 bcrypt = Bcrypt(app)
 
+KVSessionExtension(store, app)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -25,7 +35,7 @@ def injections():
     to_inject = {
         'hosts': hosts
     }
-    
+
     if secrets.DEBUG:
         to_inject['csrf_token'] = lambda: 0
 
@@ -40,6 +50,7 @@ if not secrets.DEBUG:
 
 @app.before_request
 def pre_request():
+    session.permanent = True
     init_cookie_store()
 
 @app.after_request
