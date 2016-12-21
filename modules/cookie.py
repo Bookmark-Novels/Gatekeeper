@@ -21,7 +21,7 @@ def get_cookie(cookie):
     elif cookie in __existing_cookies__:
         val = __existing_cookies__[cookie]
 
-        if val.startswith('bkm|'):
+        if val.startswith('bkmk|'):
             val = val[4:]
             val = decrypt(val, keyring.gatekeeper_secret)
 
