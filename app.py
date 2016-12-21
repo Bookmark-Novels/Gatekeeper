@@ -5,7 +5,6 @@ import redis
 from flask import Flask, session
 from flask_bcrypt import Bcrypt
 from flask_kvsession import KVSessionExtension
-from flask_login import LoginManager
 from flask_wtf.csrf import CsrfProtect
 from simplekv.decorator import PrefixDecorator
 from simplekv.memory.redisstore import RedisStore
@@ -26,9 +25,6 @@ app.session_cookie_secure = True
 bcrypt = Bcrypt(app)
 
 KVSessionExtension(store, app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
 
 @app.context_processor
 def injections():
