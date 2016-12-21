@@ -98,8 +98,7 @@ def get_session():
     session.use()
 
     return jsonify({
-        # It should be noted that gatekeeper_session is already encrypted.
-        'session_key': get_cookie('gatekeeper_session')
+        'session_key': encrypt(get_cookie('gatekeeper_session'), keyring.gatekeeper_secret)
     })
 
 @app.route('/signin', methods=['GET', 'POST'])
