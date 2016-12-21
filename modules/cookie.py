@@ -23,7 +23,7 @@ def get_cookie(cookie):
 
         if val.startswith('bkmk|'):
             val = val[4:]
-            val = decrypt(val, keyring.gatekeeper_secret)
+            val = decrypt(val, keyring.gatekeeper_key)
 
         return val
     else:
@@ -37,7 +37,7 @@ def set_cookie(key, val, max_age=60*60*24*365, domain='*.{}'.format(hosts.bookma
 
     __cookies__[key] = {
         'key': key,
-        'value': 'bkmk|' + encrypt(val, keyring.gatekeeper_secret),
+        'value': 'bkmk|' + encrypt(val, keyring.gatekeeper_key),
         'max_age': max_age,
         'doamin': domain,
         'secure': secure,
