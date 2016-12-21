@@ -19,7 +19,7 @@ class Account(BaseModel, Model):
     is_active = Column(Boolean, default=True)
     account_type = Column(Integer, default=Types.Native)
     timezone = Column(String(100))
-    created_at = Column(DateTIme)
+    created_at = Column(DateTime)
     last_updated = Column(DateTime)
 
     is_auth = None
