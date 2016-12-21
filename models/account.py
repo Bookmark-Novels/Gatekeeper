@@ -1,8 +1,9 @@
 import traceback
 
-from sqlalchemy import Column, Boolean, Integer, String
+from sqlalchemy import  Boolean, Column, DateTime, Integer, String
 from sqlalchemy.orm.exc import NoResultFound
 
+from models.accounttype import Types
 from modules.db import BaseModel, Model, session_factory
 from modules.secrets import secrets
 
@@ -10,42 +11,21 @@ class Account(BaseModel, Model):
     __tablename__ = 'bookmark_accounts'
 
     id = Column(Integer, primary_key=True)
+    display_name = Column(String(255))
+    snowflake = Column(Integer)
     email = Column(String(255))
     password = Column(String(255))
     verified = Column(Boolean, default=False)
     is_active = Column(Boolean, default=True)
+    account_type = Column(Integer, default=Types.Native)
+    timezone = Column(String(100))
+    created_at = Column(DateTIme)
+    last_updated = Column(DateTime)
 
     is_auth = None
 
-    def is_authenticated(self):
-        if self.is_auth is not None:
-            return self.is_auth
-
-        with session_factory() as sess:
-            try:
-                sess.query(Account).filter(
-                    Account.email==self.email,
-                    Account.password==self.password
-                ).one()
-
-                self.is_auth = True
-                return True
-            except NoResultFound:
-                self.is_auth = False
-                return False
-            except:
-                traceback.print_exc()
-                self.is_auth = False
-                return False
-
     def is_active(self):
         return self.verified and self.is_active
-
-    def is_anonymous(self):
-        return self.is_authenticated()
-
-    def get_id(self):
-        return unicode(self.id)
 
     @staticmethod
     def from_id(id):
