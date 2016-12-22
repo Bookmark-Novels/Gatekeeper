@@ -10,7 +10,8 @@ export class SignInForm extends React.Component {
             type: 'email',
             name: 'email',
             id: 'gatekeeper-form-email',
-            placeholder: 'email@bookmarknovels.com'
+            placeholder: 'email@bookmarknovels.com',
+            required: true
         });
 
         this.password = React.createElement(Input, {
@@ -18,13 +19,18 @@ export class SignInForm extends React.Component {
             type: 'password',
             name: 'password',
             id: 'gatekeeper-form-password',
-            placeholder: 'Super Secret Password'
+            placeholder: 'Super Secret Password',
+            required: true
         });
+    }
+
+    handleSubmit(e){
+        e.preventDefault();
     }
 
     render(){
         return (
-            <form method="POST" id="gatekeeper-form">
+            <form method="POST" id="gatekeeper-form" onSubmit={ this.handleSubmit }>
                 <header>
                     <h1>Sign in to Bookmark</h1>
                 </header>

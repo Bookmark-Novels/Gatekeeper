@@ -39,7 +39,7 @@ module.exports = function(grunt){
                     transform: [['babelify', {presets: ['es2015', 'react']}]],
                 },
                 src: ['dev-jsx/gatekeeper.js'],
-                dest: 'static/js/gatekeeper.min.js'
+                dest: 'staging/js/jsx.js'
             }
         },
         watch: {
