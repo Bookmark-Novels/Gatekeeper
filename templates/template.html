@@ -8,16 +8,24 @@
         <link href="{{ url_for('static', filename='css/gatekeeper.min.css') }}" rel="stylesheet" />
     </head>
     <body>
+        <noscript>
+            <div id="no-js">
+                You must enable JavaScript to use this page!
+            </div>
+        </noscript>
         <script>
         var gatekeeper = {
             bookmark_home: '{{ hosts.bookmark }}',
-            signin_url: '{{ url_for("signin") }}',
-            register_url: '{{ url_for("signup") }}',
-            csrf_token: '{{ csrf_token() }}'
+            csrf_token: '{{ csrf_token() }}',
+            sitemap: {
+                signin: '{{ url_for("signin") }}',
+                register: '{{ url_for("signup") }}',
+                forgot_password: '{{ url_for("forgot_password") }}'
+            }
         };
         </script>
-        <div id="gatekeeper-modal-wrapper">
-        </div>
+        <main>
+        </main>
         <script src="{{ url_for('static', filename='js/gatekeeper.min.js') }}"></script>
     </body>
 </html>

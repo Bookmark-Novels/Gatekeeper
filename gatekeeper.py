@@ -13,9 +13,9 @@ from modules.cookie import get_cookie, set_cookie
 from modules.secrets import secrets, keyring
 from modules.secure import decrypt, encrypt, get_ip
 
-@app.route('/', methods=['GET'])
-def index():
-    return render_template('/index.html')
+'''
+GATEKEEPER INTERACTION INTERFACE
+'''
 
 @app.route('/nonce', methods=['POST'])
 def request_nonce():
@@ -102,7 +102,15 @@ def get_session():
         'session_key': get_cookie('gatekeeper_session')
     })
 
-@app.route('/signin', methods=['GET', 'POST'])
+'''
+GATEKEEPER PAGES
+'''
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
+
+@app.route('/signin', methods=['POST'])
 def signin():
     if get_cookie('gatekeeper_session'):
         return redirect(url_for('index'))
@@ -113,46 +121,48 @@ def signin():
     if 'limit' not in session:
         session['limit'] = secrets.max_attempts
 
-    if request.method == 'POST':
+    if session['limit'] == 0:
+        return jsonify({
+            'error': 'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
+        })
+
+    if 'email' not in request or 'password' not in request:
+        log('Attempted to login without providing credentials: {}.', json.dumps(request.form))
+        abort(400)
+
+    test = Account.from_email(request.form['email'])
+
+    if test is None or not bcrypt.check_password_hash(test.password, request.form['password']):
+        session['limit'] -= 1
+
         if session['limit'] == 0:
-            flash(
-                'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
-            )
-            return render_template('signin.html')
+            session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=secrets.wait_minutes)
 
-        if 'email' not in request or 'password' not in request:
-            log('Attempted to login without providing credentials: {}.', json.dumps(request.form))
-            abort(400)
+        return jsonify({
+            'error': 'Invalid email or password specified.'
+        })
 
-        test = Account.from_email(request.form['email'])
+    session_key = Session.create(test.id, get_ip())
+    set_cookie('gatekeeper_session', test.session_key)
+    session['limit'] = secrets.max_attempts
 
-        if test is None or not bcrypt.check_password_hash(test.password, request.form['password']):
-            session['limit'] -= 1
+    if 'next' not in request.args:
+        return jsonify({
+            'redirect': secrets.signin_redirect
+        })
+    else:
+        return jsonify({
+            'redirect': request.args['next']
+        })
 
-            if session['limit'] == 0:
-                session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=secrets.wait_minutes)
-
-            flash('Invalid email or password specified.')
-
-        session_key = Session.create(test.id, get_ip())
-        set_cookie('gatekeeper_session', test.session_key)
-        session['limit'] = secrets.max_attempts
-
-        if 'next' not in request.args:
-            return redirect(secrets.signin_redirect)
-        else:
-            return redirect(request.args['next'])
-
-    return render_template('signin.html')
-
-@app.route('/signup')
+@app.route('/signup', methods=['POST'])
 def signup():
-    return render_template('signup.html')
+    return render_template('template.html')
 
-@app.route('/forgot-password')
+@app.route('/forgot-password', methods=['POST'])
 def forgot_password():
-    return render_template('forgot_password.html')
+    return render_template('template.html')
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
+@app.route('/<wildcard>', methods=['GET'])
+def route_to_react(wildcard):
+    return render_template('template.html')

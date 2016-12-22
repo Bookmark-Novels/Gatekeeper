@@ -123,6 +123,9 @@ button.btn-primary {
 #gatekeeper-modal-wrapper {
     max-width: 600px;
     margin: 10rem auto 0;
+}
+
+#gatekeeper-modal {
     background: #fff;
     padding: 3rem;
     border-radius: 3px;
@@ -211,4 +214,15 @@ button.btn-primary {
 #bookmark-registration-agreement {
     border-right: 1px solid $dark-gray;
     text-align: justify;
+}
+
+#no-js {
+    font-weight: 700;
+    color: #ff0000;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    background: #fff;
 }
