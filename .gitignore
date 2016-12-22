@@ -6,3 +6,5 @@ static/*
 typings/*
 staging/*
 dev-jsx/jsx.js
+.vscode/*
+venv/*
