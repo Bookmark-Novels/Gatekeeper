@@ -1,7 +1,0 @@
-{
-  "name": "bookmark-gatekeeper",
-  "dependencies": {
-    "react": "registry:dt/react#0.14.0+20161211160957",
-    "react-native": "registry:dt/react-native#0.37.0+20161201001236"
-  }
-}
