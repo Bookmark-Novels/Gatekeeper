@@ -1,4 +1,5 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 import { Link } from 'react-router';
 import { Input, WorkButton } from './form.js';
 import { Alert, Alerts } from './alerts.js';
@@ -69,6 +70,7 @@ export class SignInForm extends React.Component {
 
         return (
             <aside id="gatekeeper-modal">
+                <Helmet title="Bookmark Sign In" />
                 <Alerts ref="alerts" />
                 <form method="POST" id="gatekeeper-form" onSubmit={ this.handleSubmit }>
                     <header>
