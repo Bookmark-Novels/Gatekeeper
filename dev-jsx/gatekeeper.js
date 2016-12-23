@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory } from 'react-router';
-import { SignInForm } from './signin_form.js';
+import {Router, Route, browserHistory} from 'react-router';
+import {SignInForm} from './signin_form.js';
 // import { RegisterForm} from './register_form.js';
 // import { ForgotPasswordForm } from './forgot_password.js';
 // import { NotFound } from 'not_found.js';
-import { NavBar } from './navbar.js';
+import {NavBar} from './navbar.js';
 
 class Gatekeeper extends React.Component {
     render(){
@@ -15,7 +15,7 @@ class Gatekeeper extends React.Component {
                     <NavBar />
                 </aside>
                 <div id="gatekeeper-modal-wrapper">
-                    { this.props.children }
+                    {this.props.children}
                 </div>
             </div>
         );
@@ -23,10 +23,10 @@ class Gatekeeper extends React.Component {
 }
 
 ReactDOM.render((
-    <Router history={ browserHistory }>
-        <Route path="/" component={ Gatekeeper }>
-            <Route path={ gatekeeper.sitemap.register } component={ SignInForm } />
-            <Route path={ gatekeeper.sitemap.signin } component={ SignInForm } />
+    <Router history={browserHistory}>
+        <Route path="/" component={Gatekeeper}>
+            <Route path={gatekeeper.sitemap.register} component={SignInForm} />
+            <Route path={gatekeeper.sitemap.signin} component={SignInForm} />
         </Route>
     </Router>
 ), document.querySelector('main'));

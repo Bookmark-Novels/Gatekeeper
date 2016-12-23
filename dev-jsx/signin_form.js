@@ -1,9 +1,9 @@
 import 'whatwg-fetch';
 import React from 'react';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router';
-import { Input, WorkButton } from './form.js';
-import { Alert, Alerts } from './alerts.js';
+import {Link } from 'react-router';
+import {Input, WorkButton} from './form.js';
+import {Alert, Alerts} from './alerts.js';
 
 export class SignInForm extends React.Component {
     constructor(props){
@@ -79,28 +79,28 @@ export class SignInForm extends React.Component {
         });
 
         let alerts = this.state.alerts.map((alert, index) => {
-            return <Alert key={ index.toString() } type="error">{ alert }</Alert>;
+            return <Alert key={index.toString()} type="error">{alert}</Alert>;
         });
 
         return (
             <div>
                 <Alerts>
-                    { alerts }
+                    {alerts}
                 </Alerts>
                 <aside id="gatekeeper-modal">
                     <Helmet title="Bookmark Sign In" />
-                    <form method="POST" id="gatekeeper-form" onSubmit={ this.handleSubmit.bind(this) } ref={ (c) => { this.signin_form = c; }}>
+                    <form method="POST" id="gatekeeper-form" onSubmit={this.handleSubmit.bind(this)} ref={(c) => {this.signin_form = c;}}>
                         <header>
                             <h1>Sign in to Bookmark</h1>
                         </header>
-                        { email }
-                        { password }
+                        {email}
+                        {password}
                         <div id="gatekeeper-form-bottom">
                             <div id="gatekeeper-form-links" className="vertical-align">
                                 <span>
-                                    <Link to={ gatekeeper.sitemap.register }>Create Account</Link>
+                                    <Link to={gatekeeper.sitemap.register}>Create Account</Link>
                                     <span className="gray"> / </span>
-                                    <Link to={ gatekeeper.sitemap.forgot_password }>Forgot Password</Link>
+                                    <Link to={gatekeeper.sitemap.forgot_password}>Forgot Password</Link>
                                 </span>
                             </div>
                             <div id="gatekeeper-form-buttons" className="vertical-align">
@@ -109,7 +109,7 @@ export class SignInForm extends React.Component {
                                     &nbsp;
                                     <label htmlFor="remember">Remember Me</label>
                                 </span>
-                                <WorkButton className="btn-primary" type="submit" name="login" working={ this.state.working } >
+                                <WorkButton className="btn-primary" type="submit" name="login" working={this.state.working} >
                                     Sign In
                                 </WorkButton>
                             </div>

@@ -2,14 +2,14 @@ import React from 'react';
 
 export class Input extends React.Component {
     value(){
-        return this.refs.input.value;
+        return this.input.value;
     }
 
     render(){
         return (
             <span className="gatekeeper-form-input-group">
                 <label>{this.props.label}</label>
-                <input { ...this.props } ref="input" />
+                <input {...this.props} ref={(c) => {this.input = c;}} />
             </span>
         );
     }
@@ -62,7 +62,7 @@ export class WorkButton extends React.Component {
     }
 
     render(){
-        let { working, ...props } = this.props;
+        let {working, ...props} = this.props;
         let contents = this.props.children;
 
         if(this.state.working){
