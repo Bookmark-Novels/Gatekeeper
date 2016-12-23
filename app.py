@@ -29,7 +29,8 @@ KVSessionExtension(store, app)
 @app.context_processor
 def injections():
     to_inject = {
-        'hosts': hosts
+        'hosts': hosts,
+        'signin_redirect': secrets.signin_redirect
     }
 
     if secrets.DEBUG:

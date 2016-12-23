@@ -1,13 +1,15 @@
 import React from 'react';
 
 export class Input extends React.Component {
-    render(){
-        let input = React.createElement('input', this.props);
+    value(){
+        return this.refs.input.value;
+    }
 
+    render(){
         return (
             <span className="gatekeeper-form-input-group">
                 <label>{this.props.label}</label>
-                { input }
+                <input { ...this.props } ref="input" />
             </span>
         );
     }
@@ -32,9 +34,9 @@ export class Input extends React.Component {
  */
 export class WorkButton extends React.Component {
     constructor(props){
-        super(props);
+        super();
         this.state = {
-            working: false
+            working: props.working || false
         };
     }
 
@@ -46,31 +48,29 @@ export class WorkButton extends React.Component {
     }
 
     disable(){
-        this.props.disabled = false;
         this.setState({
             working: false
         });
     }
 
     handleClick(){
-        disable();
+        this.disable();
 
         if(this.props.job){
-            this.props.job(this._doneWorking);
+            this.props.job(this.enable);
         }
     }
 
-    _doneWorking(){
-        enable();
-    }
-
     render(){
+        let { working, ...props } = this.props;
         let contents = this.props.children;
 
         if(this.state.working){
             contents = <span className="fa fa-spin fa-circle-o-notch" />;
         }
 
-        return React.createElement('button', this.props, contents);
+        props.onClick = this.handleClick.bind(this);
+
+        return React.createElement('button', props, contents);
     }
 }

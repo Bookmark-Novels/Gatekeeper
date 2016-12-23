@@ -36,7 +36,7 @@ module.exports = function(grunt){
             dist: {
                 options: {
                     plugins: ['transform-react-jsx'],
-                    transform: [['babelify', {presets: ['es2015', 'react']}]],
+                    transform: [['babelify', {presets: ['stage-0', 'es2015', 'react']}]],
                 },
                 src: ['dev-jsx/gatekeeper.js'],
                 dest: 'staging/js/jsx.js'

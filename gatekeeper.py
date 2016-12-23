@@ -124,9 +124,10 @@ def signin():
                 'error': 'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
             })
 
-        if 'email' not in request or 'password' not in request:
-            log('Attempted to login without providing credentials: {}.', json.dumps(request.form))
-            abort(400)
+        if 'email' not in request.form or 'password' not in request.form:
+            return jsonify({
+                'error': 'Email or password not specified.'
+            })
 
         test = Account.from_email(request.form['email'])
 
@@ -161,6 +162,14 @@ def signup():
 def forgot_password():
     return render_template('template.html')
 
+@app.route('/signout', methods=['GET'])
+def signout():
+    if not get_cookie('gatekeeper_session'):
+        return redirect(url_for('signin'))
+
 @app.route('/<wildcard>', methods=['GET'])
 def route_to_react(wildcard):
+    if get_cookie('gatekeeper_session'):
+        return redirect(secrets.signin_redirect)
+
     return render_template('template.html')

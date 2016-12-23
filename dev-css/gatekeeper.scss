@@ -2,8 +2,12 @@ $gray: #f1f1f1;
 $dark-gray: darken($gray, 10%);
 $darker-gray: darken($gray, 20%);
 $darkest-gray: darken($gray, 60%);
+
 $green: #3cbc87;
 $dark-green: darken($green, 10%);
+
+$red: #ff5f5f;
+
 $link-default: $green;
 $link-hover: $dark-green;
 $body-copy: #000;
@@ -225,4 +229,13 @@ button.btn-primary {
     right: 0px;
     left: 0px;
     background: #fff;
+}
+
+.alert {
+    padding: 1rem;
+
+    &.error {
+        background: $red;
+        color: #fff;
+    }
 }
