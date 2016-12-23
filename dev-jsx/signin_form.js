@@ -88,6 +88,7 @@ export class SignInForm extends React.Component {
                         <div id="gatekeeper-form-buttons" className="vertical-align">
                             <span>
                                 <input type="checkbox" name="remember" id="remember" />
+                                &nbsp;
                                 <label htmlFor="remember" ref="remember_toggle">Remember Me</label>
                             </span>
                             <WorkButton className="btn-primary" type="submit" name="login" ref="login_button" >
