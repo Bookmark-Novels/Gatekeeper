@@ -108,43 +108,41 @@ GATEKEEPER PAGES
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return redirect(hosts.bookmark)
 
 @app.route('/signin', methods=['POST'])
 def signin():
-    if get_cookie('gatekeeper_session'):
-        return redirect(url_for('index'))
+    if not get_cookie('gatekeeper_session'):
+        if 'remove_limit_at' in session and session['remove_limit_at'] <= datetime.utcnow():
+            del session['limit']
 
-    if 'remove_limit_at' in session and session['remove_limit_at'] <= datetime.utcnow():
-        del session['limit']
-
-    if 'limit' not in session:
-        session['limit'] = secrets.max_attempts
-
-    if session['limit'] == 0:
-        return jsonify({
-            'error': 'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
-        })
-
-    if 'email' not in request or 'password' not in request:
-        log('Attempted to login without providing credentials: {}.', json.dumps(request.form))
-        abort(400)
-
-    test = Account.from_email(request.form['email'])
-
-    if test is None or not bcrypt.check_password_hash(test.password, request.form['password']):
-        session['limit'] -= 1
+        if 'limit' not in session:
+            session['limit'] = secrets.max_attempts
 
         if session['limit'] == 0:
-            session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=secrets.wait_minutes)
+            return jsonify({
+                'error': 'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
+            })
 
-        return jsonify({
-            'error': 'Invalid email or password specified.'
-        })
+        if 'email' not in request or 'password' not in request:
+            log('Attempted to login without providing credentials: {}.', json.dumps(request.form))
+            abort(400)
 
-    session_key = Session.create(test.id, get_ip())
-    set_cookie('gatekeeper_session', test.session_key)
-    session['limit'] = secrets.max_attempts
+        test = Account.from_email(request.form['email'])
+
+        if test is None or not bcrypt.check_password_hash(test.password, request.form['password']):
+            session['limit'] -= 1
+
+            if session['limit'] == 0:
+                session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=secrets.wait_minutes)
+
+            return jsonify({
+                'error': 'Invalid email or password specified.'
+            })
+
+        session_key = Session.create(test.id, get_ip())
+        set_cookie('gatekeeper_session', test.session_key)
+        session['limit'] = secrets.max_attempts
 
     if 'next' not in request.args:
         return jsonify({
