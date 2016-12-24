@@ -107,7 +107,7 @@ GATEKEEPER PAGES
 
 @app.route('/', methods=['GET'])
 def index():
-    return redirect(hosts.bookmark)
+    return redirect(secrets.signin_redirect)
 
 @app.route('/signin', methods=['POST'])
 def signin():
