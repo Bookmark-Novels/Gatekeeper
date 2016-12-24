@@ -27,7 +27,12 @@ export class Input extends React.Component {
  * When a WorkButton is clicked, the button becomes disabled
  * and its contents is replaced with a spinner. When the callback
  * passed to `job` is called, the button becomes enabled and its
- * contents is restored.
+ * contents is restored. You can also control the state of the button
+ * by passing along a `working` property. The `working` property should
+ * be passed within the parent's render method.
+ *
+ * If no `job` property is specified, this component's state will
+ * be determined entirely by the `working` property.'
  *
  * Additionally, you may manually invoke the enable/disable
  * functionality by calling `WorkButton#enable` and `WorkButton#disable`.
@@ -43,13 +48,13 @@ export class WorkButton extends React.Component {
     enable(){
         this.props.disabled = true;
         this.setState({
-            working: true
+            working: false
         });
     }
 
     disable(){
         this.setState({
-            working: false
+            working: true
         });
     }
 
@@ -65,7 +70,7 @@ export class WorkButton extends React.Component {
         let {working, ...props} = this.props;
         let contents = this.props.children;
 
-        if(this.state.working){
+        if(this.props.job && this.state.working || this.props.working){
             contents = <span className="fa fa-spin fa-circle-o-notch" />;
         }
 

@@ -57,7 +57,7 @@ export class SignInForm extends React.Component {
                     location.href = that.props.location.query.next;
                 }
 
-                // location.href = resp.redirect;
+                location.href = resp.redirect;
             }
         }).catch(function(err){
             alert('An unexpected error occurred while processing your request.');
