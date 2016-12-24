@@ -8,10 +8,16 @@ def get_ip():
 
     return request.remote_addr
 
-def encrypt(s):
-    f = Fernet(k)
-    return f.encrypt(s)
+def encrypt(s, k):
+    f = Fernet(str(k).encode('utf-8'))
 
-def decrypt(s):
-    f = Fernet(k)
-    return f.decrypt(s)
+    # Ensure this is actually a string which
+    # is then promptly turned into a bytes object.
+    s = str(s).encode('utf-8')
+    # Fernet#encrypt returns a bytes object.
+    return str(f.encrypt(s), 'utf-8')
+
+def decrypt(s, k):
+    f = Fernet(str(k).encode('utf-8'))
+    # Fernet#decrypt returns a bytes object.
+    return str(f.decrypt(s.encode('utf-8')), 'utf-8')

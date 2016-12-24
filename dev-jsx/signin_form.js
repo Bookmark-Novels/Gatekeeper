@@ -36,7 +36,8 @@ export class SignInForm extends React.Component {
             headers: {
                 'X-CSRFToken': gatekeeper.csrf_token
             },
-            body: payload
+            body: payload,
+            credentials: 'same-origin'
         }).then(function(resp){
             that.setState({
                 working: false
@@ -52,7 +53,11 @@ export class SignInForm extends React.Component {
                 alert(resp.error);
             }
             else{
-                location.href = resp.redirect;
+                if(that.props.location.query.next){
+                    location.href = that.props.location.query.next;
+                }
+
+                // location.href = resp.redirect;
             }
         }).catch(function(err){
             alert('An unexpected error occurred while processing your request.');
@@ -64,18 +69,16 @@ export class SignInForm extends React.Component {
             label: 'Email Address',
             type: 'email',
             name: 'email',
-            id: 'gatekeeper-form-email',
             placeholder: 'email@bookmarknovels.com',
-            required: true,
+            required: true
         });
 
         let password = React.createElement(Input, {
             label: 'Password',
             type: 'password',
             name: 'password',
-            id: 'gatekeeper-form-password',
             placeholder: 'Super Secret Password',
-            required: true,
+            required: true
         });
 
         let alerts = this.state.alerts.map((alert, index) => {
@@ -84,11 +87,11 @@ export class SignInForm extends React.Component {
 
         return (
             <div>
+                <Helmet title="Bookmark Sign In" />
                 <Alerts>
                     {alerts}
                 </Alerts>
                 <aside id="gatekeeper-modal">
-                    <Helmet title="Bookmark Sign In" />
                     <form method="POST" id="gatekeeper-form" onSubmit={this.handleSubmit.bind(this)} ref={(c) => {this.signin_form = c;}}>
                         <header>
                             <h1>Sign in to Bookmark</h1>
@@ -104,11 +107,15 @@ export class SignInForm extends React.Component {
                                 </span>
                             </div>
                             <div id="gatekeeper-form-buttons" className="vertical-align">
-                                <span>
-                                    <input type="checkbox" name="remember" id="remember" />
-                                    &nbsp;
-                                    <label htmlFor="remember">Remember Me</label>
-                                </span>
+                                {
+                                    /*
+                                    <span>
+                                        <input type="checkbox" name="remember" id="remember" />
+                                        &nbsp;
+                                        <label htmlFor="remember">Remember Me</label>
+                                    </span>
+                                    */
+                                }
                                 <WorkButton className="btn-primary" type="submit" name="login" working={this.state.working} >
                                     Sign In
                                 </WorkButton>

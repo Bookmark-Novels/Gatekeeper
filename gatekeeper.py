@@ -6,11 +6,11 @@ from flask import abort, flash, jsonify, redirect, render_template, request, ses
 from app import app, bcrypt
 from models.account import Account
 from models.instance import Instance
-from modules.logger import log
 from models.nonce import Nonce
 from models.session import Session
-from modules.cookie import get_cookie, set_cookie
-from modules.secrets import secrets, keyring
+from modules.cookie import delete_cookie, get_cookie, set_cookie
+from modules.logger import log
+from modules.secrets import hosts, keyring, secrets
 from modules.secure import decrypt, encrypt, get_ip
 
 '''
@@ -98,8 +98,7 @@ def get_session():
     session.use()
 
     return jsonify({
-        # It should be noted that gatekeeper_session is already encrypted.
-        'session_key': get_cookie('gatekeeper_session')
+        'session_key': encrypt(get_cookie('gatekeeper_session'), keyring.gatekeeper_key)
     })
 
 '''
@@ -142,21 +141,39 @@ def signin():
             })
 
         session_key = Session.create(test.id, get_ip())
-        set_cookie('gatekeeper_session', test.session_key)
+        set_cookie('gatekeeper_session', session_key)
         session['limit'] = secrets.max_attempts
 
-    if 'next' not in request.args:
-        return jsonify({
-            'redirect': secrets.signin_redirect
-        })
-    else:
-        return jsonify({
-            'redirect': request.args['next']
-        })
+    return jsonify({
+        'redirect': secrets.signin_redirect
+    })
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    return render_template('template.html')
+    if get_cookie('gatekeeper_session'):
+        return jsonify({
+            'redirect': secrets.signin_redirect
+        })
+
+    if 'name' not in request.form or 'email' not in request.form or 'password' not in request.form:
+        return jsonify({
+            'error': 'Name, email or password not specified.'
+        })
+
+    test = Account.from_email(request.form['email'])
+
+    if test is not None:
+        return jsonify({
+            'error': 'An account with the password {} already exists.'.format(request.form['email'])
+        })
+
+    acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
+    session_key = Session.create(acc_id, get_ip())
+    set_cookie('gatekeeper_session', session_key)
+
+    return jsonify({
+        'redirect': secrets.signin_redirect
+    })
 
 @app.route('/forgot-password', methods=['POST'])
 def forgot_password():
@@ -167,9 +184,16 @@ def signout():
     if not get_cookie('gatekeeper_session'):
         return redirect(url_for('signin'))
 
+    session_key = get_cookie('gatekeeper_session')
+    Session.from_key(session_key).invalidate()
+    delete_cookie('gatekeeper_session')
+
+    return redirect(url_for('signin'))
+
 @app.route('/<wildcard>', methods=['GET'])
 def route_to_react(wildcard):
     if get_cookie('gatekeeper_session'):
-        return redirect(secrets.signin_redirect)
+        print(get_cookie('gatekeeper_session'))
+        # return redirect(secrets.signin_redirect)
 
     return render_template('template.html')

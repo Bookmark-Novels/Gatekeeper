@@ -18,6 +18,15 @@ module.exports = function(grunt){
                 files: {
                     'static/js/gatekeeper.min.js': ['staging/js/jsx.js', 'dev-js/gatekeeper.js']
                 }
+            },
+            dev: {
+                files: {
+                    'static/js/gatekeeper.min.js': ['staging/js/jsx.js', 'dev-js/gatekeeper.js']
+                },
+                options: {
+                    mangle: false,
+                    compress: false
+                }
             }
         },
         sass: {
@@ -37,6 +46,8 @@ module.exports = function(grunt){
                 options: {
                     plugins: ['transform-react-jsx'],
                     transform: [['babelify', {presets: ['stage-0', 'es2015', 'react']}]],
+                    watch: true,
+                    keepAlive: true
                 },
                 src: ['dev-jsx/gatekeeper.js'],
                 dest: 'staging/js/jsx.js'
@@ -48,12 +59,8 @@ module.exports = function(grunt){
                 tasks: ['sass']
             },
             js: {
-                files: 'dev-js/**/*.js',
-                tasks: ['jshint', 'uglify']
-            },
-            browserify: {
-                files: ['dev-jsx/**/*.js'],
-                tasks: ['browserify',  'uglify']
+                files: ['dev-js/**/*.js', 'staging/js/*.js'],
+                tasks: ['jshint', 'uglify:dev']
             }
         }
     });

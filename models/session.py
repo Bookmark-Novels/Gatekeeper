@@ -35,7 +35,6 @@ class Session(BaseModel, Model):
                 session = sess.query(Session).filter(
                     Session.session_key==key,
                 ).one()
-                sess.expunge(Session)
                 return session
             except NoResultFound:
                 return None
@@ -50,6 +49,10 @@ class Session(BaseModel, Model):
             self.save()
             return True
         return False
+
+    def invalidate(self):
+        self.is_active = False
+        self.save()
 
     @staticmethod
     def create(account_id, ip):

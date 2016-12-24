@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, browserHistory} from 'react-router';
 import {SignInForm} from './signin_form.js';
-// import { RegisterForm} from './register_form.js';
+import {RegisterForm} from './register_form.js';
 // import { ForgotPasswordForm } from './forgot_password.js';
 // import { NotFound } from 'not_found.js';
 import {NavBar} from './navbar.js';
@@ -25,7 +25,7 @@ class Gatekeeper extends React.Component {
 ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={Gatekeeper}>
-            <Route path={gatekeeper.sitemap.register} component={SignInForm} />
+            <Route path={gatekeeper.sitemap.register} component={RegisterForm} />
             <Route path={gatekeeper.sitemap.signin} component={SignInForm} />
         </Route>
     </Router>
