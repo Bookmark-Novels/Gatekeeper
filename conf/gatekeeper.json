@@ -9,7 +9,7 @@
         "port": 3306,
         "name": "bookmark"
     },
-    "signin_redirect": "https://bookmarknovels.com",
+    "signin_redirect": "https://dev.bookmarknovels.com",
     "max_attempts": 5,
     "wait_minutes": 5
 }

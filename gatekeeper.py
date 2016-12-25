@@ -193,7 +193,6 @@ def signout():
 @app.route('/<wildcard>', methods=['GET'])
 def route_to_react(wildcard):
     if get_cookie('gatekeeper_session'):
-        print(get_cookie('gatekeeper_session'))
-        # return redirect(secrets.signin_redirect)
+        return redirect(secrets.signin_redirect)
 
     return render_template('template.html')

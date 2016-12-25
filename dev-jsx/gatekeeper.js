@@ -32,7 +32,6 @@ ReactDOM.render((
 ), document.querySelector('main'));
 
 /*
-<Route path={ gatekeeper.sitemap.register } component={ RegisterForm } />
 <Route path={ gatekeeper.sitemap.forgot_password } component={ ForgotPasswordForm } />
 <Route path="*" component={ NotFound } />
 */
