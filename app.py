@@ -27,6 +27,7 @@ bcrypt = Bcrypt(app)
 
 KVSessionExtension(store, app)
 
+# Variable injections that should be available to all templates.
 @app.context_processor
 def injections():
     to_inject = {
@@ -35,6 +36,7 @@ def injections():
         'static_url': static_url
     }
 
+    # Create a dummy csrf function for templates if debug is on.
     if secrets.DEBUG:
         to_inject['csrf_token'] = lambda: 0
 
@@ -49,11 +51,15 @@ if not secrets.DEBUG:
 
 @app.before_request
 def pre_request():
+    # Sessions should be permanent.
     session.permanent = True
+    # Initialize the local cookie store.
     init_cookie_store()
 
 @app.after_request
 def post_request(response):
+    # Export the local cookie store by
+    # sending appropriate response headers.
     export_cookie_store(response)
     return response
 

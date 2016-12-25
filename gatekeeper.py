@@ -19,6 +19,22 @@ GATEKEEPER INTERACTION INTERFACE
 
 @app.route('/nonce', methods=['POST'])
 def request_nonce():
+    """Returns an encrypted nonce as a JSON response.
+
+    The created nonce is bound to the requesting application's
+    instance ID.
+
+    Payload (Encrypted):
+        {
+            "instance_id": <string>
+        }
+    Response:
+        {
+            "nonce": <string | encrypted>
+        }
+    Raises:
+        400: No payload provided/Invalid payload provided.
+    """
     if 'payload' not in request.form:
         log('No payload provided.')
         abort(400)
@@ -36,7 +52,7 @@ def request_nonce():
         abort(400)
 
     if 'instance_id' not in payload:
-        log('No payload provided.')
+        log('Instance ID not present in payload.')
         abort(400)
 
     instance_id = payload['instance_id']
@@ -53,6 +69,18 @@ def request_nonce():
 
 @app.route('/session', methods=['POST'])
 def get_session():
+    """Returns a user's session key as an encrypted string.
+
+    Payload (Encrypted):
+        {
+            "nonce": <string>,
+            "origin": <string>
+        }
+    Response:
+        {
+            "session_key": <string | encrypted>
+        }
+    """
     if 'payload' not in request.form:
         log('No payload provided.')
         abort(400)
@@ -111,6 +139,19 @@ def index():
 
 @app.route('/signin', methods=['POST'])
 def signin():
+    """Attempts to sign the user in.
+
+    Payload:
+        {
+            "email": <string>,
+            "password": <string>
+        }
+    Response:
+        {
+            "redirect": <string>,
+            "error": <string>
+        }
+    """
     if not get_cookie('gatekeeper_session'):
         if 'remove_limit_at' in session and session['remove_limit_at'] <= datetime.utcnow():
             del session['limit']
@@ -150,6 +191,20 @@ def signin():
 
 @app.route('/signup', methods=['POST'])
 def signup():
+    """Attempts to create a new user account.
+
+    Payload:
+        {
+            "name": <string>,
+            "email": <string>,
+            "password": <string>
+        }
+    Response:
+        {
+            "redirect": <string>,
+            "error": <string>
+        }
+    """
     if get_cookie('gatekeeper_session'):
         return jsonify({
             'redirect': secrets.signin_redirect
@@ -181,6 +236,7 @@ def forgot_password():
 
 @app.route('/signout', methods=['GET'])
 def signout():
+    """Signs a user out. Deletes the user's `gatekeeper_session` cookie and invalidates the session server-side."""
     if not get_cookie('gatekeeper_session'):
         return redirect(url_for('signin'))
 
