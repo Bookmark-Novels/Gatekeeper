@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import json
 
-from flask import abort, flash, jsonify, redirect, render_template, request, session, url_for
+from flask import abort, jsonify, redirect, render_template, request, session, url_for
 
 from app import app, bcrypt
 from models.account import Account
@@ -10,7 +10,7 @@ from models.nonce import Nonce
 from models.session import Session
 from modules.cookie import delete_cookie, get_cookie, set_cookie
 from modules.logger import log
-from modules.secrets import hosts, keyring, secrets
+from modules.secrets import keyring, secrets
 from modules.secure import decrypt, encrypt, get_ip
 
 '''
@@ -105,8 +105,8 @@ def get_session():
         log('No origin provided in payload.')
         abort(400)
 
-    if not nonce.use(payload['nonce'], payload['origin']):
-        log('Invalid nonce provided: <{}, {}>.', payload['nonce'], payload['origin'])
+    if not Nonce.use(payload['nonce'], payload['origin']):
+        log('Invalid nonce provided: <{}, {}>.'.format(payload['nonce'], payload['origin']))
         abort(400)
 
     if not get_cookie('gatekeeper_session'):
@@ -114,16 +114,16 @@ def get_session():
             'session_key': None
         })
 
-    session = Session.from_key(get_cookie('gatekeeper_session'))
+    sess = Session.from_key(get_cookie('gatekeeper_session'))
 
-    if session is None or not session.is_active:
+    if sess is None or not sess.is_active:
         delete_cookie('gatekeeper_session')
         return jsonify({
             'session_key': None
         })
 
-    session.update_ip(get_ip())
-    session.use()
+    sess.update_ip(get_ip())
+    sess.use()
 
     return jsonify({
         'session_key': encrypt(get_cookie('gatekeeper_session'), keyring.gatekeeper_key)
@@ -135,7 +135,8 @@ GATEKEEPER PAGES
 
 @app.route('/', methods=['GET'])
 def index():
-    return redirect(secrets.signin_redirect)
+    """You shouldn't be here. Redirect to Bookmark."""
+    return redirect("https://bookmarknovels.com")
 
 @app.route('/signin', methods=['POST'])
 def signin():
@@ -179,6 +180,11 @@ def signin():
 
             return jsonify({
                 'error': 'Invalid email or password specified.'
+            })
+
+        if not test.is_active:
+            return jsonify({
+                'error': 'This account has been disabled.'
             })
 
         session_key = Session.create(test.id, get_ip())
@@ -246,8 +252,9 @@ def signout():
 
     return redirect(url_for('signin'))
 
-@app.route('/<wildcard>', methods=['GET'])
-def route_to_react(wildcard):
+@app.route('/<path>', methods=['GET'])
+def route_to_react(path):
+    """Wildcard to send everything to React."""
     if get_cookie('gatekeeper_session'):
         return redirect(secrets.signin_redirect)
 

@@ -105,5 +105,5 @@ def delete_cookie(key):
 
 def export_cookie_store(response):
     """Sends the appropriate reponse headers for each cookie in the store."""
-    for key in g.__cookies__.keys():
+    for key in g.__cookies__:
         response.set_cookie(**g.__cookies__[key])

@@ -8,3 +8,4 @@ staging/*
 dev-jsx/jsx.js
 .vscode/*
 venv/*
+tags

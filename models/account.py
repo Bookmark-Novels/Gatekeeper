@@ -25,9 +25,6 @@ class Account(BaseModel, Model):
 
     is_auth = None
 
-    def is_active(self):
-        return self.verified and self.is_active
-
     @staticmethod
     def from_id(id):
         with session_factory() as sess:
