@@ -14,9 +14,23 @@ class Instance(BaseModel, Model):
     def exists(instance):
         with session_factory() as sess:
             try:
-                n = sess.query(Instance).filter(
+                sess.query(Instance).filter(
                     Instance.instance_id==instance
                 ).one()
                 return True
             except NoResultFound:
                 return False
+
+    @staticmethod
+    def from_id(id):
+        with session_factory() as sess:
+            try:
+                instance = sess.query(Instance).filter(
+                    Instance.instance_id==id
+                ).one()
+
+                sess.expunge(instance)
+
+                return instance
+            except NoResultFound:
+                return None

@@ -42,7 +42,7 @@ def request_nonce():
     try:
         payload = decrypt(request.form['payload'], keyring.gatekeeper_key)
     except:
-        log('Invalid payload provided: {}.'.format(payload))
+        log('Invalid payload provided: {}.'.format(request.form['payload']))
         abort(400)
 
     try:
