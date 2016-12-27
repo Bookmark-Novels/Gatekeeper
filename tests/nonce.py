@@ -3,10 +3,9 @@ import os
 import sys
 import traceback
 
-PARENT = os.path.abspath(os.path.join(os.path.dirname(__name__), '..'))
+PARENT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 sys.path.append(PARENT)
-os.chdir(PARENT)
 
 import requests
 
