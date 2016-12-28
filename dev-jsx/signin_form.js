@@ -31,7 +31,7 @@ export class SignInForm extends React.Component {
 
         var payload = new FormData(this.signin_form);
 
-        fetch(gatekeeper.sitemap.signin, {
+        fetch(gatekeeper.ep.signin, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': gatekeeper.csrf_token

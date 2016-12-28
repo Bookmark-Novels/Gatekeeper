@@ -31,7 +31,7 @@ export class RegisterForm extends React.Component {
 
         var payload = new FormData(this.register_form);
 
-        fetch(gatekeeper.sitemap.register, {
+        fetch(gatekeeper.ep.register, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': gatekeeper.csrf_token

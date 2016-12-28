@@ -191,6 +191,11 @@ def signin():
         set_cookie('gatekeeper_session', session_key)
         session['limit'] = secrets.max_attempts
 
+    if 'next' in request.args:
+        return jsonify({
+            'redirect': request.args['next']
+        })
+
     return jsonify({
         'redirect': secrets.signin_redirect
     })
@@ -231,6 +236,11 @@ def signup():
     acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
     session_key = Session.create(acc_id, get_ip())
     set_cookie('gatekeeper_session', session_key)
+
+    if 'next' in request.args:
+        return jsonify({
+            'redirect': request.args['next']
+        })
 
     return jsonify({
         'redirect': secrets.signin_redirect

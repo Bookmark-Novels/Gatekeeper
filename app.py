@@ -12,7 +12,7 @@ from simplekv.memory.redisstore import RedisStore
 from models.account import Account
 from modules.cookie import init_cookie_store, export_cookie_store
 from modules.secrets import hosts, secrets
-from modules.util import static_url
+from modules.util import static_url, persist_url
 
 store = RedisStore(redis.StrictRedis(host=hosts.redis))
 store = PrefixDecorator('gatekeeper_', store)
@@ -33,7 +33,8 @@ def injections():
     to_inject = {
         'hosts': hosts,
         'signin_redirect': secrets.signin_redirect,
-        'static_url': static_url
+        'static_url': static_url,
+        'persist_url': persist_url
     }
 
     # Create a dummy csrf function for templates if debug is on.

@@ -20,6 +20,10 @@
                 signin: '{{ url_for("signin") }}',
                 register: '{{ url_for("signup") }}',
                 forgot_password: '{{ url_for("forgot_password") }}'
+            },
+            ep: {
+                signin: '{{ persist_url("signin") }}',
+                register: '{{ persist_url("signup") }}'
             }
         };
         </script>
