@@ -7,11 +7,15 @@ PARENT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 sys.path.append(PARENT)
 
-import requests
-
 from models.instance import Instance
+from models.nonce import Nonce
 from modules.secrets import hosts, keyring
 from modules.secure import decrypt, encrypt
+
+from app import app
+
+app.testing = True
+app = app.test_client()
 
 INSTANCE_ID = 'test-instance'
 INSTANCE_NAME = INSTANCE_ID
@@ -23,45 +27,64 @@ except:
     pass
 
 def test_nonce_resp():
-    try:
-        resp = requests.post('http://' + hosts.gatekeeper + '/nonce', {
-            'payload': encrypt(json.dumps(
-                {
-                    'instance_id': INSTANCE_ID
-                }
-            ), keyring.gatekeeper_key)
-        }).text
+    resp = app.post('/nonce', data={
+        'payload': encrypt(json.dumps(
+            {
+                'instance_id': INSTANCE_ID
+            }
+        ), keyring.gatekeeper_key)
+    })
 
-        resp = json.loads(resp)
+    resp = json.loads(resp.get_data(as_text=True))
 
-        assert 'nonce' in resp and resp['nonce'] != ''
-    except:
-        traceback.print_exc()
+    assert 'nonce' in resp and resp['nonce'] != ''
+
+def test_nonce_validity():
+    resp = app.post('/nonce', data={
+        'payload': encrypt(json.dumps(
+            {
+                'instance_id': INSTANCE_ID
+            }
+        ), keyring.gatekeeper_key)
+    })
+
+    resp = json.loads(resp.get_data(as_text=True))
+
+    assert 'nonce' in resp and resp['nonce'] != ''
+
+    nonce = decrypt(resp['nonce'], keyring.gatekeeper_key)
+
+    assert Nonce.use(nonce, INSTANCE_ID)
+
+def test_failing_nonce_use():
+    assert not Nonce.use('fdsfdsfsd', INSTANCE_ID)
+
+    nonce = Nonce.create(INSTANCE_ID)
+
+    assert not Nonce.use(nonce, 'fosidfoisdjf')
+    assert not Nonce.use(None, None)
 
 def test_failing_nonce():
-    try:
-        resp = requests.post('http://' + hosts.gatekeeper + '/nonce').status_code
-        assert resp == 400
+    resp = app.post('/nonce').status_code
+    assert resp == 400
 
-        resp = requests.post('http://' + hosts.gatekeeper + '/nonce', {'fosidjfodsijf': 'dsofidjfoi'}).status_code
-        assert resp == 400
+    resp = app.post('/nonce', data={'fosidjfodsijf': 'dsofidjfoi'}).status_code
+    assert resp == 400
 
-        resp = requests.post('http://' + hosts.gatekeeper + '/nonce', {'payload': 'dsofidjfoi'}).status_code
-        assert resp == 400
+    resp = app.post('/nonce', data={'payload': 'dsofidjfoi'}).status_code
+    assert resp == 400
 
-        esp = requests.post('http://' + hosts.gatekeeper + '/nonce', {'payload': encrypt('fsdoifjdsoifj', keyring.gatekeeper_key)}).status_code
-        assert resp == 400
+    esp = app.post('/nonce', data={'payload': encrypt('fsdoifjdsoifj', keyring.gatekeeper_key)}).status_code
+    assert resp == 400
 
-        esp = requests.post('http://' + hosts.gatekeeper + '/nonce', {'payload': encrypt('{"fdfdsf":"fsdfd"}', keyring.gatekeeper_key)}).status_code
-        assert resp == 400
+    esp = app.post('/nonce', data={'payload': encrypt('{"fdfdsf":"fsdfd"}', keyring.gatekeeper_key)}).status_code
+    assert resp == 400
 
-        resp = requests.post('http://' + hosts.gatekeeper + '/nonce', {
-            'payload': encrypt(json.dumps(
-                {
-                    'instance_id': 'fsdfsdfsdf'
-                }
-            ), keyring.gatekeeper_key)
-        }).status_code
-        assert resp == 400
-    except:
-        traceback.print_exc()
+    resp = app.post('/nonce', data={
+        'payload': encrypt(json.dumps(
+            {
+                'instance_id': 'fsdfsdfsdf'
+            }
+        ), keyring.gatekeeper_key)
+    }).status_code
+    assert resp == 400
