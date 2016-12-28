@@ -16,14 +16,11 @@ class Account(BaseModel, Model):
     display_name = Column(String(255))
     email = Column(String(255))
     password = Column(String(255))
-    verified = Column(Boolean, default=False)
     is_active = Column(Boolean, default=True)
     account_type = Column(Integer, default=Types.Native)
-    timezone = Column(String(100))
+    timezone = Column(String(100), default='N/A')
     created_at = Column(DateTime)
     last_updated = Column(DateTime)
-
-    is_auth = None
 
     @staticmethod
     def from_id(id):
@@ -60,10 +57,8 @@ class Account(BaseModel, Model):
             display_name=name,
             email=email,
             password=password,
-            timezone='N/A',
             created_at=now,
-            last_updated=now,
-            account_type=Types.Native
+            last_updated=now
         ).save()
 
         return Account.from_email(email).id

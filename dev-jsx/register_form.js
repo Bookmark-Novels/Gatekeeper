@@ -37,6 +37,7 @@ export class RegisterForm extends React.Component {
                 'X-CSRFToken': gatekeeper.csrf_token
             },
             body: payload,
+            // Cookies cannot be set by AJAX responses if this is not set.
             credentials: 'same-origin'
         }).then(function(resp){
             that.setState({

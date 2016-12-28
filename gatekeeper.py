@@ -10,7 +10,7 @@ from models.nonce import Nonce
 from models.session import Session
 from modules.cookie import delete_cookie, get_cookie, set_cookie
 from modules.logger import log
-from modules.secrets import keyring, secrets
+from modules.secrets import hosts, keyring, secrets
 from modules.secure import decrypt, encrypt, get_ip
 
 '''
@@ -136,7 +136,7 @@ GATEKEEPER PAGES
 @app.route('/', methods=['GET'])
 def index():
     """You shouldn't be here. Redirect to Bookmark."""
-    return redirect("https://bookmarknovels.com")
+    return redirect("https://" + hosts.bookmark)
 
 @app.route('/signin', methods=['POST'])
 def signin():
