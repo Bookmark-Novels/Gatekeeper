@@ -216,26 +216,22 @@ def signup():
             "error": <string>
         }
     """
-    if get_cookie('gatekeeper_session'):
-        return jsonify({
-            'redirect': secrets.signin_redirect
-        })
+    if not get_cookie('gatekeeper_session'):
+        if 'name' not in request.form or 'email' not in request.form or 'password' not in request.form:
+            return jsonify({
+                'error': 'Name, email or password not specified.'
+            })
 
-    if 'name' not in request.form or 'email' not in request.form or 'password' not in request.form:
-        return jsonify({
-            'error': 'Name, email or password not specified.'
-        })
+        test = Account.from_email(request.form['email'])
 
-    test = Account.from_email(request.form['email'])
+        if test is not None:
+            return jsonify({
+                'error': 'An account with the password {} already exists.'.format(request.form['email'])
+            })
 
-    if test is not None:
-        return jsonify({
-            'error': 'An account with the password {} already exists.'.format(request.form['email'])
-        })
-
-    acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
-    session_key = Session.create(acc_id, get_ip())
-    set_cookie('gatekeeper_session', session_key)
+        acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
+        session_key = Session.create(acc_id, get_ip())
+        set_cookie('gatekeeper_session', session_key)
 
     if 'next' in request.args:
         return jsonify({
