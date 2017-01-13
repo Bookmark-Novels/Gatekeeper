@@ -112,7 +112,7 @@ export class RegisterForm extends React.Component {
                         <div id="gatekeeper-form-bottom">
                             <div id="bookmark-registration-agreement" className="small vertical-align">
                                 <span>
-                                    By clicking "Create Account", I am willingly acknowledging and accepting the Bookmark <a href={`${gatekeeper.bookmark_host}/tos`}>terms&nbsp;of&nbsp;service</a> and <a href={`${gatekeeper.bookmark_host}/privacy`}>privacy&nbsp;policy</a>.
+                                    By clicking "Create Account", I am willingly acknowledging and accepting the Bookmark <a href={`https://${gatekeeper.bookmark_host}/tos`}>terms&nbsp;of&nbsp;service</a> and <a href={`https://${gatekeeper.bookmark_host}/privacy`}>privacy&nbsp;policy</a>.
                                 </span>
                             </div>
                             <div id="gatekeeper-form-buttons" className="vertical-align">
