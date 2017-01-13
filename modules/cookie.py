@@ -30,7 +30,7 @@ def get_cookie(cookie):
     else:
         return None
 
-    if len(val) > 5 && val[:5] == 'bkmk|':
+    if len(val) > 5 and val[:5] == 'bkmk|':
         val = val[5:]
         val = decrypt(val, keyring.gatekeeper_key)
 
