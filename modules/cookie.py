@@ -22,6 +22,9 @@ def get_cookie(cookie):
         is a string set by set_cookie, then it will be encrypted.
         Luckily for you, get_cookie will decrypt it for you; a plain-text
         version of the cookie will be returned.
+
+        In the event that a cookie is encrypted and cannot be decrypted
+        None will be returned.
     """
     if cookie in g.__cookies__:
         val = g.__cookies__[cookie]['value']
@@ -32,7 +35,11 @@ def get_cookie(cookie):
 
     if len(val) > 5 and val[:5] == 'bkmk|':
         val = val[5:]
-        val = decrypt(val, keyring.gatekeeper_key)
+
+        try:
+            val = decrypt(val, keyring.gatekeeper_key)
+        except:
+            return None
 
     return val
 
