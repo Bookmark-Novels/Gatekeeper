@@ -25,5 +25,7 @@ def persist_url(route, *args, **kwargs):
         A route URL with the current requests's query paramters appended to it.abs
     """
     if request.args:
-        return url_for(route, *args, **kwargs, **request.args)
+        # Python 3.4 support.
+        kwargs.update(request.args)
+        return url_for(route, *args, **kwargs)
     return url_for(route)
