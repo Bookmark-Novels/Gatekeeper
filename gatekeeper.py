@@ -156,6 +156,7 @@ def signin():
     if not get_cookie('gatekeeper_session'):
         if 'remove_limit_at' in session and session['remove_limit_at'] <= datetime.utcnow():
             del session['limit']
+            del session['remove_limit_at']
 
         if 'limit' not in session:
             session['limit'] = secrets.max_attempts
