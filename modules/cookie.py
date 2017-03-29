@@ -41,7 +41,7 @@ def get_cookie(cookie):
             val = decrypt(val, keyring.gatekeeper_key)
         except:
             log('Unable to decrypt bkmk encrypted cookie ({}): {}'.format(cookie, val))
-            return None
+            return False
 
     return val
 
@@ -61,7 +61,7 @@ def set_cookie(key, val, max_age=60*60*24*365, domain='.{}'.format(hosts.bookmar
         domain (default=*.):
             The domain to bind the cookie to. By default, the cookie
             is bound to all domains and subdomains of Bookmark.
-        secure (default=False if DEBUG else False):
+        secure (default=False if DEBUG else True):
             Whether the cookie should only be accessible through HTTPS.
         http_only (default=True):
             Whether the cookie should only be accessible by the server.

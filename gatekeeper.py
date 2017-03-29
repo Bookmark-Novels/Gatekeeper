@@ -109,10 +109,13 @@ def get_session():
         log('Invalid nonce provided: <{}, {}>.'.format(payload['nonce'], payload['origin']))
         abort(400)
 
-    if not get_cookie('gatekeeper_session'):
+    if get_cookie('gatekeeper_session') is None:
         return jsonify({
             'session_key': None
         })
+    elif get_cookie('gatekeeper_session') is False:
+        log('Unable to verify session integrity.')
+        abort(400)
 
     sess = Session.from_key(get_cookie('gatekeeper_session'))
 
@@ -153,7 +156,7 @@ def signin():
             "error": <string>
         }
     """
-    if not get_cookie('gatekeeper_session'):
+    if get_cookie('gatekeeper_session') is None:
         if 'remove_limit_at' in session and session['remove_limit_at'] <= datetime.utcnow():
             del session['limit']
             del session['remove_limit_at']
@@ -191,6 +194,12 @@ def signin():
         session_key = Session.create(test.id, get_ip())
         set_cookie('gatekeeper_session', session_key)
         session['limit'] = secrets.max_attempts
+    elif get_cookie('gatekeeper_session') is False:
+        log('Unable to verify session integrity.')
+        delete_cookie('gatekeeper_session')
+        return jsonify({
+            'error': 'An unexpected error ocurred while logging in. Please try again.'
+        })
 
     if 'next' in request.args:
         return jsonify({
@@ -217,7 +226,7 @@ def signup():
             "error": <string>
         }
     """
-    if not get_cookie('gatekeeper_session'):
+    if get_cookie('gatekeeper_session') is None:
         if 'name' not in request.form or 'email' not in request.form or 'password' not in request.form:
             return jsonify({
                 'error': 'Name, email or password not specified.'
@@ -233,6 +242,12 @@ def signup():
         acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
         session_key = Session.create(acc_id, get_ip())
         set_cookie('gatekeeper_session', session_key)
+    elif get_cookie('gatekeeper_session') is None:
+        log('Unable to verify session integrity.')
+        delete_cookie('gatekeeper_session')
+        return jsonify({
+            'error': 'An unexpected error ocurred while registering. Please try again.'
+        })
 
     if 'next' in request.args:
         return jsonify({
@@ -250,8 +265,10 @@ def forgot_password():
 @app.route('/signout', methods=['GET'])
 def signout():
     """Signs a user out. Deletes the user's `gatekeeper_session` cookie and invalidates the session server-side."""
-    if not get_cookie('gatekeeper_session'):
+    if get_cookie('gatekeeper_session') is None:
         return redirect(url_for('signin'))
+    elif get_cookie('gatekeeper_session') is False:
+        log('Unable to verify session integrity.')
 
     session_key = get_cookie('gatekeeper_session')
     Session.from_key(session_key).invalidate()
