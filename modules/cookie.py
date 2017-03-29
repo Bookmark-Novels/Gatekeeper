@@ -53,7 +53,7 @@ def set_cookie(key, val, max_age=60*60*24*365, domain='.{}'.format(hosts.bookmar
     cookie values on an as-needed basis.
 
     Args:
-        key (required): The key to use when name the cookie.
+        key (required): The key to use when naming the cookie.
         val (required): The value to use when setting the cookie.
         max_age (default=365 days):
             The max_age value of the cookie. Used to specify
