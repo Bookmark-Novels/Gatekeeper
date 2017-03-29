@@ -1,5 +1,6 @@
 from flask import g, request
 
+from modules.logger import log
 from modules.secrets import hosts, keyring, secrets
 from modules.secure import encrypt, decrypt
 
@@ -39,6 +40,7 @@ def get_cookie(cookie):
         try:
             val = decrypt(val, keyring.gatekeeper_key)
         except:
+            log('Unable to decrypt bkmk encrypted cookie ({}): {}'.format(cookie, val))
             return None
 
     return val
