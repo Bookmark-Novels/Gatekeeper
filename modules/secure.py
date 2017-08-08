@@ -14,6 +14,20 @@ def get_ip():
 
     return request.remote_addr
 
+def get_request_info():
+    return {
+        "ip": get_ip(),
+        "request_path": request.full_path,
+        "request_method": request.method,
+        "request_scheme": request.scheme,
+        "request_post": request.form,
+        "request_args": request.args,
+        "request_cookies": request.cookies,
+        "request_headers": request.headers,
+        "request_url": request.url,
+        "request_endpoint": request.endpoint
+    }
+
 def encrypt(s, k):
     """Returns an encrypted version of a string.
 

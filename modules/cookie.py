@@ -40,7 +40,7 @@ def get_cookie(cookie):
         try:
             val = decrypt(val, keyring.gatekeeper_key)
         except:
-            log('Unable to decrypt bkmk encrypted cookie ({}): {}'.format(cookie, val))
+            log.error('Unable to decrypt bkmk encrypted cookie ({}): {}'.format(cookie, val))
             return False
 
     return val

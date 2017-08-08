@@ -9,8 +9,8 @@ from flask_wtf.csrf import CsrfProtect
 from simplekv.decorator import PrefixDecorator
 from simplekv.memory.redisstore import RedisStore
 
-from models.account import Account
 from modules.cookie import init_cookie_store, export_cookie_store
+from modules.logger import log
 from modules.secrets import hosts, secrets
 from modules.util import static_url, persist_url
 
@@ -56,6 +56,8 @@ def pre_request():
     session.permanent = True
     # Initialize the local cookie store.
     init_cookie_store()
+
+    log.info('Received request.')
 
 @app.after_request
 def post_request(response):
