@@ -1,5 +1,6 @@
 from flask import g, request
 
+from modules.logger import log
 from modules.secrets import hosts, keyring, secrets
 from modules.secure import encrypt, decrypt
 
@@ -22,6 +23,9 @@ def get_cookie(cookie):
         is a string set by set_cookie, then it will be encrypted.
         Luckily for you, get_cookie will decrypt it for you; a plain-text
         version of the cookie will be returned.
+
+        In the event that a cookie is encrypted and cannot be decrypted
+        None will be returned.
     """
     if cookie in g.__cookies__:
         val = g.__cookies__[cookie]['value']
@@ -32,7 +36,12 @@ def get_cookie(cookie):
 
     if len(val) > 5 and val[:5] == 'bkmk|':
         val = val[5:]
-        val = decrypt(val, keyring.gatekeeper_key)
+
+        try:
+            val = decrypt(val, keyring.gatekeeper_key)
+        except:
+            log.error('Unable to decrypt bkmk encrypted cookie ({}): {}'.format(cookie, val))
+            return False
 
     return val
 
@@ -44,7 +53,7 @@ def set_cookie(key, val, max_age=60*60*24*365, domain='.{}'.format(hosts.bookmar
     cookie values on an as-needed basis.
 
     Args:
-        key (required): The key to use when name the cookie.
+        key (required): The key to use when naming the cookie.
         val (required): The value to use when setting the cookie.
         max_age (default=365 days):
             The max_age value of the cookie. Used to specify
@@ -52,7 +61,7 @@ def set_cookie(key, val, max_age=60*60*24*365, domain='.{}'.format(hosts.bookmar
         domain (default=*.):
             The domain to bind the cookie to. By default, the cookie
             is bound to all domains and subdomains of Bookmark.
-        secure (default=False if DEBUG else False):
+        secure (default=False if DEBUG else True):
             Whether the cookie should only be accessible through HTTPS.
         http_only (default=True):
             Whether the cookie should only be accessible by the server.

@@ -75,6 +75,14 @@ input {
     }
 }
 
+/*
+FF shows a red box shadow for required inputs rendered in React
+Issue 17: https://github.com/Bookmark-Novels/Gatekeeper/issues/17
+*/
+input[required]:-moz-ui-invalid {
+    box-shadow: none;
+}
+
 input[type=checkbox], input[type=radio] {
     vertical-align: middle;
     position: relative;

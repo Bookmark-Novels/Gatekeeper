@@ -7,8 +7,8 @@ PARENT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 sys.path.append(PARENT)
 
-from models.instance import Instance
-from models.nonce import Nonce
+from bookmark_database.models.instance import Instance
+from bookmark_database.models.nonce import Nonce
 from modules.secrets import hosts, keyring
 from modules.secure import decrypt, encrypt
 

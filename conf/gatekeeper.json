@@ -11,5 +11,12 @@
     },
     "signin_redirect": "https://dev.bookmarknovels.com",
     "max_attempts": 5,
-    "wait_minutes": 5
+    "wait_minutes": 5,
+    "graylog": {
+        "host": "logs.dev.bookmarknovels.com",
+        "port": 12200,
+        "static_fields": {},
+        "use_tls": true,
+        "null_character": true
+    }
 }
