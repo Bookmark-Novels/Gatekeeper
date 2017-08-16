@@ -263,7 +263,7 @@ def signup():
         })
 
     return jsonify({
-        'redirect': secrets.signin_redirect
+        'redirect': config.get_string('signin_redirect')
     })
 
 @app.route('/forgot-password', methods=['POST'])
@@ -292,6 +292,6 @@ def health_check():
 def route_to_react(path):
     """Wildcard to send everything to React."""
     if get_cookie('gatekeeper_session'):
-        return redirect(secrets.signin_redirect)
+        return redirect(config.get_string('config', 'signin_redirect'))
 
     return render_template('template.html')
