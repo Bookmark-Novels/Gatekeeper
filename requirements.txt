@@ -15,13 +15,17 @@ graypy==0.2.14
 itsdangerous==0.24        # via flask, flask-kvsession
 jinja2==2.9.6             # via flask
 markupsafe==1.0           # via jinja2
+py==1.4.34                # via pytest
 pycparser==2.18           # via cffi
+pytest==3.2.1
 redis==2.10.5
 simplekv==0.10.0
 six==1.10.0               # via bcrypt, flask-kvsession
 werkzeug==0.12.2          # via flask, flask-kvsession
 wtforms==2.1              # via flask-wtf
 
+# Manually added dependencies.
 git+https://github.com/Bookmark-Novels/Locksmith.git@v1.0.0
 git+https://github.com/Bookmark-Novels/Bookmark-Config.git@v1.0.4
 git+https://github.com/Bookmark-Novels/Bookmark-Database.git@v1.0.6
+

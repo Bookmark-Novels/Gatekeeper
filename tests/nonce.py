@@ -1,14 +1,17 @@
 import json
 import os
 import sys
-import traceback
 
 PARENT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 sys.path.append(PARENT)
 
+# Common must be imported first to initialize configuration values.
+from modules.common import config
+
 from bookmark_database.models.instance import Instance
 from bookmark_database.models.nonce import Nonce
+
 from modules.secure import decrypt, encrypt
 
 from app import app
@@ -31,7 +34,7 @@ def test_nonce_resp():
             {
                 'instance_id': INSTANCE_ID
             }
-        ), keyring.gatekeeper_key)
+        ))
     })
 
     resp = json.loads(resp.get_data(as_text=True))
@@ -44,14 +47,14 @@ def test_nonce_validity():
             {
                 'instance_id': INSTANCE_ID
             }
-        ), keyring.gatekeeper_key)
+        ))
     })
 
     resp = json.loads(resp.get_data(as_text=True))
 
     assert 'nonce' in resp and resp['nonce'] != ''
 
-    nonce = decrypt(resp['nonce'], keyring.gatekeeper_key)
+    nonce = decrypt(resp['nonce'])
 
     assert Nonce.use(nonce, INSTANCE_ID)
 
@@ -73,10 +76,10 @@ def test_failing_nonce():
     resp = app.post('/nonce', data={'payload': 'dsofidjfoi'}).status_code
     assert resp == 400
 
-    esp = app.post('/nonce', data={'payload': encrypt('fsdoifjdsoifj', keyring.gatekeeper_key)}).status_code
+    esp = app.post('/nonce', data={'payload': encrypt('fsdoifjdsoifj')}).status_code
     assert resp == 400
 
-    esp = app.post('/nonce', data={'payload': encrypt('{"fdfdsf":"fsdfd"}', keyring.gatekeeper_key)}).status_code
+    esp = app.post('/nonce', data={'payload': encrypt('{"fdfdsf":"fsdfd"}')}).status_code
     assert resp == 400
 
     resp = app.post('/nonce', data={
@@ -84,6 +87,6 @@ def test_failing_nonce():
             {
                 'instance_id': 'fsdfsdfsdf'
             }
-        ), keyring.gatekeeper_key)
+        ))
     }).status_code
     assert resp == 400

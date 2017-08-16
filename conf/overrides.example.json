@@ -1,8 +1,15 @@
 {
     "gatekeeper": {
+        "stage": "dev",
         "config": {
             "vault_token": "",
-            "gatekeper_secret_key": ""
+            "gatekeeper_secret_key": "",
+            "hosts": {
+                "redis": "127.0.0.1"
+            },
+            "mysql": {
+                "database": ""
+            }
         }
     }
 }

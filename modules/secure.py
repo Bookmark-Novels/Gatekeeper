@@ -23,7 +23,7 @@ def get_request_info():
         "request_post": request.form,
         "request_args": request.args,
         "request_cookies": request.cookies,
-        "request_headers": request.headers,
+        "request_headers": str(request.headers).strip(),
         "request_url": request.url,
         "request_endpoint": request.endpoint
     }

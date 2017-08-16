@@ -52,7 +52,7 @@ def request_nonce():
         abort(400)
 
     if 'instance_id' not in payload:
-        log('Instance ID not present in payload.')
+        log.error('Instance ID not present in payload.')
         abort(400)
 
     instance_id = payload['instance_id']

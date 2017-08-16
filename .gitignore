@@ -13,3 +13,4 @@ tags
 .idea
 .vagrant
 conf/overrides.json
+logs

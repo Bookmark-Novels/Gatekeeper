@@ -6,6 +6,7 @@ flask-wtf
 redis
 simplekv
 graypy
+pytest
 
 # These are commented out because apparently pip-compile doesn't work with VCS?
 # git+git://github.com/Bookmark-Novels/Locksmith.git@v1.0.0#egg=locksmith
