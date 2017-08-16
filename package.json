@@ -27,10 +27,13 @@
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-sass": "^1.2.1",
-    "jshint": "^2.9.4"
+    "jshint": "^2.9.4",
+    "snyk": "^1.38.2"
   },
   "scripts": {
-    "test": "python gatekeeper.py"
+    "test": "python gatekeeper.py",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -41,5 +44,6 @@
   "bugs": {
     "url": "https://github.com/Bookmark-Novels/Gatekeeper/issues"
   },
-  "homepage": "https://github.com/Bookmark-Novels/Gatekeeper#readme"
+  "homepage": "https://github.com/Bookmark-Novels/Gatekeeper#readme",
+  "snyk": true
 }
