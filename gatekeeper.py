@@ -47,7 +47,7 @@ def request_nonce():
 
     try:
         payload = json.loads(payload)
-    except:
+    except ValueError:
         log.error('Supplied payload is not valid JSON: {}.'.format(payload))
         abort(400)
 
@@ -93,7 +93,7 @@ def get_session():
 
     try:
         payload = json.loads(payload)
-    except:
+    except ValueError:
         log.error('Supplied payload is not valid JSON: {}.'.format(payload))
         abort(400)
 
