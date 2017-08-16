@@ -1,18 +1,18 @@
-import React from 'react';
+import React from 'react'
 
 export class Input extends React.Component {
-    value(){
-        return this.input.value;
-    }
+  value () {
+    return this.input.value
+  }
 
-    render(){
-        return (
-            <span className="gatekeeper-form-input-group">
-                <label>{this.props.label}</label>
-                <input {...this.props} ref={(c) => {this.input = c;}} />
-            </span>
-        );
-    }
+  render () {
+    return (
+      <span className='gatekeeper-form-input-group'>
+        <label>{this.props.label}</label>
+        <input {...this.props} ref={(c) => { this.input = c }} />
+      </span>
+    )
+  }
 }
 
 /**
@@ -38,44 +38,44 @@ export class Input extends React.Component {
  * functionality by calling `WorkButton#enable` and `WorkButton#disable`.
  */
 export class WorkButton extends React.Component {
-    constructor(props){
-        super();
-        this.state = {
-            working: props.working || false
-        };
+  constructor (props) {
+    super()
+    this.state = {
+      working: props.working || false
+    }
+  }
+
+  enable () {
+    this.props.disabled = true
+    this.setState({
+      working: false
+    })
+  }
+
+  disable () {
+    this.setState({
+      working: true
+    })
+  }
+
+  handleClick () {
+    this.disable()
+
+    if (this.props.job) {
+      this.props.job(this.enable)
+    }
+  }
+
+  render () {
+    let {working, ...props} = this.props
+    let contents = this.props.children
+
+    if ((this.props.job && this.state.working) || this.props.working) {
+      contents = <span className='fa fa-spin fa-circle-o-notch' />
     }
 
-    enable(){
-        this.props.disabled = true;
-        this.setState({
-            working: false
-        });
-    }
+    props.onClick = this.handleClick.bind(this)
 
-    disable(){
-        this.setState({
-            working: true
-        });
-    }
-
-    handleClick(){
-        this.disable();
-
-        if(this.props.job){
-            this.props.job(this.enable);
-        }
-    }
-
-    render(){
-        let {working, ...props} = this.props;
-        let contents = this.props.children;
-
-        if(this.props.job && this.state.working || this.props.working){
-            contents = <span className="fa fa-spin fa-circle-o-notch" />;
-        }
-
-        props.onClick = this.handleClick.bind(this);
-
-        return React.createElement('button', props, contents);
-    }
+    return React.createElement('button', props, contents)
+  }
 }

@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
+    "babel-eslint": "^7.2.3",
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
@@ -28,7 +29,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-sass": "^1.2.1",
     "jshint": "^2.9.4",
-    "snyk": "^1.38.2"
+    "snyk": "^1.38.2",
+    "standard": "^10.0.3"
   },
   "scripts": {
     "test": "python gatekeeper.py",
@@ -45,5 +47,11 @@
     "url": "https://github.com/Bookmark-Novels/Gatekeeper/issues"
   },
   "homepage": "https://github.com/Bookmark-Novels/Gatekeeper#readme",
-  "snyk": true
+  "snyk": true,
+  "standard": {
+    "parser": "babel-eslint",
+    "globals": [
+      "gatekeeper", "fetch", "FormData"
+    ]
+  }
 }

@@ -7,14 +7,15 @@ PARENT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(PARENT)
 
 # Common must be imported first to initialize configuration values.
-from modules.common import config
+import modules.common
 
 from bookmark_database.models.instance import Instance
 from bookmark_database.models.nonce import Nonce
 
 from modules.secure import decrypt, encrypt
 
-from app import app
+from modules.app import app
+from routes import gatekeeper
 
 app.testing = True
 app = app.test_client()

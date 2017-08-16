@@ -1,5 +1,7 @@
 from flask import request
+from flask_bcrypt import Bcrypt
 
+from .app import app
 from .common import locksmith
 
 def get_ip():
@@ -47,3 +49,5 @@ def decrypt(s):
         A decrypted plain-text version of `s`.
     """
     return locksmith.decrypt(s)
+
+bcrypt = Bcrypt(app)

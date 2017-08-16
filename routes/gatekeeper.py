@@ -1,17 +1,16 @@
-from datetime import datetime, timedelta
 import json
+from datetime import datetime, timedelta
 
-from flask import abort, jsonify, redirect, render_template, request, session, url_for
-
-from app import app, bcrypt
 from bookmark_database.models.account import Account
 from bookmark_database.models.instance import Instance
 from bookmark_database.models.nonce import Nonce
 from bookmark_database.models.session import Session
+from flask import abort, jsonify, redirect, render_template, request, session, url_for
+
+from modules.app import app
 from modules.common import config
-from modules.cookie import delete_cookie, get_cookie, set_cookie
 from modules.logger import log
-from modules.secure import decrypt, encrypt, get_ip
+from modules.secure import bcrypt, decrypt, encrypt, get_ip
 
 '''
 GATEKEEPER INTERACTION INTERFACE
@@ -109,18 +108,15 @@ def get_session():
         log.error('Invalid nonce provided: <{}, {}>.'.format(payload['nonce'], payload['origin']))
         abort(400)
 
-    if get_cookie('gatekeeper_session') is None:
+    if 'gatekeeper_session' not in session:
         return jsonify({
             'session_key': None
         })
-    elif get_cookie('gatekeeper_session') is False:
-        log.error('Unable to verify session integrity.')
-        abort(400)
 
-    sess = Session.from_key(get_cookie('gatekeeper_session'))
+    sess = Session.from_key(session['gatekeeper_session'])
 
     if sess is None or not sess.is_active:
-        delete_cookie('gatekeeper_session')
+        del session['gatekeeper_session']
         return jsonify({
             'session_key': None
         })
@@ -129,7 +125,7 @@ def get_session():
     sess.use()
 
     return jsonify({
-        'session_key': encrypt(get_cookie('gatekeeper_session'))
+        'session_key': encrypt(session['gatekeeper_session'])
     })
 
 '''
@@ -156,7 +152,7 @@ def signin():
             "error": <string>
         }
     """
-    if get_cookie('gatekeeper_session') is None:
+    if 'gatekeeper_session' not in session:
         if 'remove_limit_at' in session and session['remove_limit_at'] <= datetime.utcnow():
             del session['limit']
             del session['remove_limit_at']
@@ -200,14 +196,10 @@ def signin():
             })
 
         session_key = Session.create(test.id, get_ip())
-        set_cookie('gatekeeper_session', session_key)
+        session['gatekeeper_session'] = session_key
         session['limit'] = max_attempts
-    elif get_cookie('gatekeeper_session') is False:
-        log.error('Unable to verify session integrity.')
-        delete_cookie('gatekeeper_session')
-        return jsonify({
-            'error': 'An unexpected error ocurred while logging in. Please try again.'
-        })
+
+        log.info('User signed in with email {}.' + request.form['email'])
 
     if 'next' in request.args:
         return jsonify({
@@ -234,7 +226,7 @@ def signup():
             "error": <string>
         }
     """
-    if get_cookie('gatekeeper_session') is None:
+    if 'gatekeeper_session' not in session:
         if 'name' not in request.form or 'email' not in request.form or 'password' not in request.form:
             return jsonify({
                 'error': 'Name, email or password not specified.'
@@ -249,13 +241,9 @@ def signup():
 
         acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
         session_key = Session.create(acc_id, get_ip())
-        set_cookie('gatekeeper_session', session_key)
-    elif get_cookie('gatekeeper_session') is None:
-        log.error('Unable to verify session integrity.')
-        delete_cookie('gatekeeper_session')
-        return jsonify({
-            'error': 'An unexpected error ocurred while registering. Please try again.'
-        })
+        session['gatekeeper_session'] = session_key
+
+        log.info('User signed up in with email {}.' + request.form['email'])
 
     if 'next' in request.args:
         return jsonify({
@@ -273,14 +261,12 @@ def forgot_password():
 @app.route('/signout', methods=['GET'])
 def signout():
     """Signs a user out. Deletes the user's `gatekeeper_session` cookie and invalidates the session server-side."""
-    if get_cookie('gatekeeper_session') is None:
+    if 'gatekeeper_session' not in session:
         return redirect(url_for('signin'))
-    elif get_cookie('gatekeeper_session') is False:
-        log.warning('Unable to verify session integrity.')
 
-    session_key = get_cookie('gatekeeper_session')
-    Session.from_key(session_key).invalidate()
-    delete_cookie('gatekeeper_session')
+    log.info('User signed out with session key {}.'.format(session['gatekeeper_session']))
+    Session.from_key(session['gatekeeper_session']).invalidate()
+    del session['gatekeeper_session']
 
     return redirect(url_for('signin'))
 
@@ -291,7 +277,7 @@ def health_check():
 @app.route('/<path>', methods=['GET'])
 def route_to_react(path):
     """Wildcard to send everything to React."""
-    if get_cookie('gatekeeper_session'):
+    if 'gatekeeper_session' in session:
         return redirect(config.get_string('config', 'signin_redirect'))
 
     return render_template('template.html')
