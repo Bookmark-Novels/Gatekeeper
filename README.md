@@ -2,6 +2,12 @@
 
 Gatekeeper is Bookmark's SSO authentication service. All session requests are authenticated via an encrypted nounce + origin application instance ID combo.
 
+## Pipelines
+
+**master:** [![Build Status](https://travis-ci.org/Bookmark-Novels/Gatekeeper.svg?branch=master)](https://travis-ci.org/Bookmark-Novels/Gatekeeper)
+
+**dev:** [![Build Status](https://travis-ci.org/Bookmark-Novels/Gatekeeper.svg?branch=dev)](https://travis-ci.org/Bookmark-Novels/Gatekeeper)
+
 ## To Contributors
 
 Note that we use [EditorConfig](http://editorconfig.org/) for all our style needs.
@@ -12,4 +18,4 @@ Merged branches will be deleted every 2-3 days after merging.
 
 ## Getting Started
 
-See [this page](https://github.com/Bookmark-Novels/Gatekeeper/wiki/Running-Gatekeeper).
+See [this page](https://wiki.dev.bookmark.services/development/gatekeeper/dev-setup-old).
