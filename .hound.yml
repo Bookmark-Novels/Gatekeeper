@@ -1,9 +1,0 @@
-scss:
-    enabled: true
-
-jshint:
-    ignore_file: static/js/*.js
-    enabled: true
-
-python:
-    enabled: true

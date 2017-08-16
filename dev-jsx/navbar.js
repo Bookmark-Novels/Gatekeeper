@@ -6,7 +6,7 @@ export class NavBar extends React.Component {
         return (
             <nav>
                 <span id="bookmark-logo">
-                    <a href={`https://${gatekeeper.bookmark_host}`}>
+                    <a href={`${gatekeeper.bookmark_host}`}>
                         Bookmark Novels
                     </a>
                 </span>

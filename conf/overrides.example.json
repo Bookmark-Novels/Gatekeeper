@@ -1,0 +1,8 @@
+{
+    "gatekeeper": {
+        "config": {
+            "vault_token": "",
+            "gatekeper_secret_key": ""
+        }
+    }
+}

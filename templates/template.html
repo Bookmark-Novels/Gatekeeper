@@ -14,7 +14,7 @@
         </noscript>
         <script>
         var gatekeeper = {
-            bookmark_host: '{{ hosts.bookmark }}',
+            bookmark_host: '{{ bookmark_host }}',
             csrf_token: '{{ csrf_token() }}',
             sitemap: {
                 signin: '{{ url_for("signin") }}',

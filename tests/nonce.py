@@ -9,7 +9,6 @@ sys.path.append(PARENT)
 
 from bookmark_database.models.instance import Instance
 from bookmark_database.models.nonce import Nonce
-from modules.secrets import hosts, keyring
 from modules.secure import decrypt, encrypt
 
 from app import app

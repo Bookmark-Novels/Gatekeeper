@@ -8,9 +8,9 @@ from bookmark_database.models.account import Account
 from bookmark_database.models.instance import Instance
 from bookmark_database.models.nonce import Nonce
 from bookmark_database.models.session import Session
+from modules.common import config
 from modules.cookie import delete_cookie, get_cookie, set_cookie
 from modules.logger import log
-from modules.secrets import hosts, keyring, secrets
 from modules.secure import decrypt, encrypt, get_ip
 
 '''
@@ -40,7 +40,7 @@ def request_nonce():
         abort(400)
 
     try:
-        payload = decrypt(request.form['payload'], keyring.gatekeeper_key)
+        payload = decrypt(request.form['payload'])
     except:
         log.error('Invalid payload provided: {}.'.format(request.form['payload']))
         abort(400)
@@ -61,7 +61,7 @@ def request_nonce():
         nonce = Nonce.create(instance_id)
 
         return jsonify({
-            'nonce': encrypt(nonce, keyring.gatekeeper_key)
+            'nonce': encrypt(nonce)
         })
 
     log.error('Invalid instance ID provided: {}.'.format(instance_id))
@@ -86,7 +86,7 @@ def get_session():
         abort(400)
 
     try:
-        payload = decrypt(request.form['payload'], keyring.gatekeeper_key)
+        payload = decrypt(request.form['payload'])
     except:
         log.error('Invalid payload provided: {}.'.format(payload))
         abort(400)
@@ -129,7 +129,7 @@ def get_session():
     sess.use()
 
     return jsonify({
-        'session_key': encrypt(get_cookie('gatekeeper_session'), keyring.gatekeeper_key)
+        'session_key': encrypt(get_cookie('gatekeeper_session'))
     })
 
 '''
@@ -139,7 +139,7 @@ GATEKEEPER PAGES
 @app.route('/', methods=['GET'])
 def index():
     """You shouldn't be here. Redirect to Bookmark."""
-    return redirect("https://" + hosts.bookmark)
+    return redirect(config.get_string('config', 'hosts', 'bookmark'))
 
 @app.route('/signin', methods=['POST'])
 def signin():
@@ -161,12 +161,16 @@ def signin():
             del session['limit']
             del session['remove_limit_at']
 
+        max_attempts = config.get_integer('config', 'max_login_attempts')
+        wait_minutes = config.get_integer('config', 'login_cooldown_minutes')
+
         if 'limit' not in session:
-            session['limit'] = secrets.max_attempts
+            session['limit'] = max_attempts
 
         if session['limit'] == 0:
+            log.warning('User failed to login more than {} times.'.format(max_attempts))
             return jsonify({
-                'error': 'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
+                'error': 'You have failed to log in more than {} times. Please try again later.'.format(max_attempts)
             })
 
         if 'email' not in request.form or 'password' not in request.form:
@@ -180,20 +184,24 @@ def signin():
             session['limit'] -= 1
 
             if session['limit'] == 0:
-                session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=secrets.wait_minutes)
+                session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=wait_minutes)
+
+            log.warning('User failed to login with email {}.'.format(request.form['email']))
 
             return jsonify({
                 'error': 'Invalid email or password specified.'
             })
 
         if not test.is_active:
+            log.warning('User attempted to login with inactive account {}.'.format(test.email))
+
             return jsonify({
                 'error': 'This account has been disabled.'
             })
 
         session_key = Session.create(test.id, get_ip())
         set_cookie('gatekeeper_session', session_key)
-        session['limit'] = secrets.max_attempts
+        session['limit'] = max_attempts
     elif get_cookie('gatekeeper_session') is False:
         log.error('Unable to verify session integrity.')
         delete_cookie('gatekeeper_session')
@@ -207,7 +215,7 @@ def signin():
         })
 
     return jsonify({
-        'redirect': secrets.signin_redirect
+        'redirect': config.get_string('config', 'signin_redirect')
     })
 
 @app.route('/signup', methods=['POST'])
@@ -236,7 +244,7 @@ def signup():
 
         if test is not None:
             return jsonify({
-                'error': 'An account with the password {} already exists.'.format(request.form['email'])
+                'error': 'An account with the email {} already exists.'.format(request.form['email'])
             })
 
         acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
@@ -276,6 +284,10 @@ def signout():
 
     return redirect(url_for('signin'))
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return '', 200
+
 @app.route('/<path>', methods=['GET'])
 def route_to_react(path):
     """Wildcard to send everything to React."""
@@ -283,6 +295,3 @@ def route_to_react(path):
         return redirect(secrets.signin_redirect)
 
     return render_template('template.html')
-
-Unseal Key: ZOrgPYYyIfalgSk4q/brDH72Lzo9SLdoRklOFBv1hKQ=
-Root Token: 1ceb880c-0d78-a5e8-ed9a-57ff2ad0a00d

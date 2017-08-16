@@ -1,8 +1,8 @@
 from flask import g, request
 
-from modules.logger import log
-from modules.secrets import hosts, keyring, secrets
-from modules.secure import encrypt, decrypt
+from .common import config
+from .logger import log
+from .secure import encrypt, decrypt
 
 def init_cookie_store():
     """Initializes the cookie store for use with the current response.
@@ -38,14 +38,21 @@ def get_cookie(cookie):
         val = val[5:]
 
         try:
-            val = decrypt(val, keyring.gatekeeper_key)
+            val = decrypt(val)
         except:
             log.error('Unable to decrypt bkmk encrypted cookie ({}): {}'.format(cookie, val))
             return False
 
     return val
 
-def set_cookie(key, val, max_age=60*60*24*365, domain='.{}'.format(hosts.bookmark), secure=not secrets.DEBUG, httponly=True):
+def set_cookie(
+        key,
+        val,
+        max_age=60*60*24*365,
+        domain='.{}'.format(config.get_string('config', 'cookie_domain')),
+        secure=not config.get_boolean('config', 'debug'),
+        httponly=True
+):
     """Sets a cookie.
 
     Cookies set by applications should always be HTTP only. In the event
@@ -68,7 +75,7 @@ def set_cookie(key, val, max_age=60*60*24*365, domain='.{}'.format(hosts.bookmar
     """
     g.__cookies__[key] = {
         'key': key,
-        'value': 'bkmk|' + encrypt(val, keyring.gatekeeper_key),
+        'value': 'bkmk|' + encrypt(val),
         'max_age': max_age,
         'domain': domain,
         'secure': secure,

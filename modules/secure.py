@@ -1,6 +1,6 @@
-from cryptography.fernet import Fernet
-
 from flask import request
+
+from .common import locksmith
 
 def get_ip():
     """Attempts to return a user's IP address.
@@ -28,36 +28,22 @@ def get_request_info():
         "request_endpoint": request.endpoint
     }
 
-def encrypt(s, k):
+def encrypt(s):
     """Returns an encrypted version of a string.
 
     Args:
         s: The string to encrypt.
-        k: A 128-bit secret used to encrypt `s`. This should be a string.
     Returns:
         An encrypted version of `s`.
     """
-    f = Fernet(str(k).encode('utf-8'))
+    return locksmith.encrypt(s)
 
-    # Ensure this is actually a string which
-    # is then promptly turned into a bytes object.
-    s = str(s).encode('utf-8')
-    # Fernet#encrypt returns a bytes object.
-    return str(f.encrypt(s), 'utf-8')
-
-def decrypt(s, k):
+def decrypt(s):
     """Returns a decrypted version of a string.
 
     Args:
         s: The string to decrypt.
-        k: A 128-bit secret used to decrypt `s`. This should be a string.
     Returns:
         A decrypted plain-text version of `s`.
-    Raises:
-        cryptography.fernet.InvalidToken:
-            If `s` is invalid in any way.
-            Refer to https://cryptography.io/en/latest/fernet/ for further details.
     """
-    f = Fernet(str(k).encode('utf-8'))
-    # Fernet#decrypt returns a bytes object.
-    return str(f.decrypt(s.encode('utf-8')), 'utf-8')
+    return locksmith.decrypt(s)

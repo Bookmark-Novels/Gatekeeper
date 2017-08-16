@@ -2,20 +2,18 @@ import logging
 
 import graypy
 
-from .secrets import secrets, instance
+from .common import config, INSTANCE_NAME
 from .secure import get_request_info
 
 class BookmarkFilter(logging.Filter):
     def filter(self, record):
         info = get_request_info()
-        info.update(secrets.graylog.static_fields)
+        record.__dict__.update(info)
 
-        record.__dict__.update(get_request_info())
-
-log = logging.getLogger(instance.instance_name)
+log = logging.getLogger(INSTANCE_NAME)
 log.setLevel(logging.INFO)
 
-handler = graypy.GELFHandler(secrets.graylog.host, secrets.graylog.port)
+handler = graypy.GELFHandler(config.get_string('config', 'hosts', 'graylog'), config.get_integer('config', 'graylog', 'port'))
 log.addHandler(handler)
 
 log.addFilter(BookmarkFilter())
