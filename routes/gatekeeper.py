@@ -12,9 +12,7 @@ from modules.common import config
 from modules.logger import log
 from modules.secure import bcrypt, decrypt, encrypt, get_ip
 
-'''
-GATEKEEPER INTERACTION INTERFACE
-'''
+# GATEKEEPER INTERACTION INTERFACE
 
 @app.route('/nonce', methods=['POST'])
 def request_nonce():
@@ -128,9 +126,7 @@ def get_session():
         'session_key': encrypt(session['gatekeeper_session'])
     })
 
-'''
-GATEKEEPER PAGES
-'''
+# GATEKEEPER PAGES
 
 @app.route('/', methods=['GET'])
 def index():

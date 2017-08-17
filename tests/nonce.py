@@ -7,7 +7,7 @@ PARENT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(PARENT)
 
 # Common must be imported first to initialize configuration values.
-import modules.common
+import modules.common # pylint: disable=unused-import
 
 from bookmark_database.models.instance import Instance
 from bookmark_database.models.nonce import Nonce
@@ -17,7 +17,7 @@ from modules.secure import decrypt, encrypt
 from modules.app import app
 
 # Import routes.
-from routes import gatekeeper
+from routes import gatekeeper # pylint: disable=unused-import
 
 app.testing = True
 app = app.test_client()
