@@ -1,7 +1,6 @@
-import 'whatwg-fetch'
+import fetch from 'whatwg-fetch'
 import React from 'react'
 import Helmet from 'react-helmet'
-import {Link} from 'react-router'
 import {Input, WorkButton} from './form.js'
 import {Alert, Alerts} from './alerts.js'
 
@@ -101,9 +100,9 @@ export class SignInForm extends React.Component {
             <div id='gatekeeper-form-bottom'>
               <div id='gatekeeper-form-links' className='vertical-align'>
                 <span>
-                  <Link to={gatekeeper.sitemap.register}>Create Account</Link>
+                  <a href={`${gatekeeper.sitemap.register}`}>Create Account</a>
                   <span className='gray'> / </span>
-                  <Link to={gatekeeper.sitemap.forgot_password}>Forgot Password</Link>
+                  <a href={`${gatekeeper.sitemap.forgot_password}`}>Forgot Password</a>
                 </span>
               </div>
               <div id='gatekeeper-form-buttons' className='vertical-align'>

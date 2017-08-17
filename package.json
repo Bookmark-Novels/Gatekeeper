@@ -28,6 +28,7 @@
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-sass": "^1.2.1",
+    "grunt-standard": "^3.1.0",
     "jshint": "^2.9.4",
     "snyk": "^1.38.2",
     "standard": "^10.0.3"
@@ -51,7 +52,9 @@
   "standard": {
     "parser": "babel-eslint",
     "globals": [
-      "gatekeeper", "fetch", "FormData"
+      "gatekeeper",
+      "fetch",
+      "FormData"
     ]
   }
 }
