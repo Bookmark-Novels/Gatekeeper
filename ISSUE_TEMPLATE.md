@@ -1,5 +1,7 @@
 **Browser:** ...
+
 **Operating System**: ...
+
 **Description:** Please write as much detail as possible.
 
 **Steps to Reproduce:**
