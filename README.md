@@ -1,12 +1,15 @@
 # Gatekeeper
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b9279b59eae14efb86aa119fa3e96622)](https://www.codacy.com/app/WildAndrewLee/Gatekeeper?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Bookmark-Novels/Gatekeeper&amp;utm_campaign=Badge_Grade)
+
 Gatekeeper is Bookmark's SSO authentication service. All session requests are authenticated via an encrypted nounce + origin application instance ID combo.
 
 ## Pipelines
 
-**master:** [![Build Status](https://travis-ci.org/Bookmark-Novels/Gatekeeper.svg?branch=master)](https://travis-ci.org/Bookmark-Novels/Gatekeeper)
-
-**dev:** [![Build Status](https://travis-ci.org/Bookmark-Novels/Gatekeeper.svg?branch=dev)](https://travis-ci.org/Bookmark-Novels/Gatekeeper)
+| Branch | Status |
+|--------|--------|
+| master | [![Build Status](https://travis-ci.org/Bookmark-Novels/Gatekeeper.svg?branch=master)](https://travis-ci.org/Bookmark-Novels/Gatekeeper) |
+| dev    | [![Build Status](https://travis-ci.org/Bookmark-Novels/Gatekeeper.svg?branch=dev)](https://travis-ci.org/Bookmark-Novels/Gatekeeper) |
 
 ## To Contributors
 
