@@ -79,10 +79,10 @@ def test_failing_nonce():
     resp = app.post('/nonce', data={'payload': 'dsofidjfoi'}).status_code
     assert resp == 400
 
-    esp = app.post('/nonce', data={'payload': encrypt('fsdoifjdsoifj')}).status_code
+    resp = app.post('/nonce', data={'payload': encrypt('fsdoifjdsoifj')}).status_code
     assert resp == 400
 
-    esp = app.post('/nonce', data={'payload': encrypt('{"fdfdsf":"fsdfd"}')}).status_code
+    resp = app.post('/nonce', data={'payload': encrypt('{"fdfdsf":"fsdfd"}')}).status_code
     assert resp == 400
 
     resp = app.post('/nonce', data={

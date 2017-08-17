@@ -15,6 +15,11 @@ Vagrant.configure("2") do |config|
   config.hostmanager.manage_guest = true
   config.hostmanager.include_offline = true
 
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+    v.cpus = 2
+  end
+
   config.vm.provision "shell", inline: <<-SHELL
     # Shared Bookmark Script
     wget -O - --quiet https://raw.githubusercontent.com/Bookmark-Novels/Resources/master/Tools/Scripts/vagrant_bootstrap.sh | sh

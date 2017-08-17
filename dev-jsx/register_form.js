@@ -1,4 +1,4 @@
-import 'whatwg-fetch'
+import fetch from 'whatwg-fetch'
 import React from 'react'
 import Helmet from 'react-helmet'
 import {Input, WorkButton} from './form.js'

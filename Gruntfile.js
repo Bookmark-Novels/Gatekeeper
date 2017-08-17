@@ -5,12 +5,18 @@ module.exports = function (grunt) {
         src: ['**/.sass-cache', '**/*.pyc', '**/*.map']
       }
     },
-    jshint: {
-      files: ['dev-js/*.js'],
-      options: {
-        globals: {
-          jQuery: true
-        }
+    standard: {
+      app: {
+        options: {
+          globals: [
+            "gatekeeper",
+            "FormData"
+          ],
+          fix: true
+        },
+        src: [
+          'dev-jsx/*.js'
+        ]
       }
     },
     uglify: {
@@ -60,17 +66,17 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['dev-js/**/*.js', 'staging/js/*.js'],
-        tasks: ['jshint', 'uglify:dev']
+        tasks: ['standard', 'uglify:dev']
       }
     }
   })
 
   grunt.loadNpmTasks('grunt-browserify')
   grunt.loadNpmTasks('grunt-contrib-clean')
-  grunt.loadNpmTasks('grunt-contrib-jshint')
+  grunt.loadNpmTasks('grunt-standard')
   grunt.loadNpmTasks('grunt-contrib-uglify')
   grunt.loadNpmTasks('grunt-contrib-sass')
   grunt.loadNpmTasks('grunt-contrib-watch')
 
-  grunt.registerTask('default', ['clean', 'jshint', 'browserify', 'uglify', 'sass'])
+  grunt.registerTask('default', ['clean', 'standard', 'browserify', 'uglify', 'sass'])
 }

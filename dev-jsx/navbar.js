@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router'
 
 export class NavBar extends React.Component {
   render () {
@@ -10,16 +9,16 @@ export class NavBar extends React.Component {
             Bookmark Novels
           </a>
         </span>
-        <Link to={{pathname: gatekeeper.sitemap.signin}}>
+        <a href={`${gatekeeper.sitemap.signin}`}>
           <span className='fa fa-sign-in' />
             &nbsp;
             Sign In
-          </Link>
-        <Link to={{pathname: gatekeeper.sitemap.register}}>
+          </a>
+        <a href={`${gatekeeper.sitemap.register}`}>
           <span className='fa fa-user-plus' />
             &nbsp;
             Create Account
-          </Link>
+          </a>
       </nav>
     )
   }
