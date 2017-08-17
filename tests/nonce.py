@@ -15,6 +15,8 @@ from bookmark_database.models.nonce import Nonce
 from modules.secure import decrypt, encrypt
 
 from modules.app import app
+
+# Import routes.
 from routes import gatekeeper
 
 app.testing = True
