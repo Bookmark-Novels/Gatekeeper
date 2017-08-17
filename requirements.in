@@ -1,0 +1,15 @@
+bcrypt
+flask
+flask-bcrypt
+flask-kvsession
+flask-wtf
+redis
+simplekv
+graypy
+pytest
+
+# These are commented out because apparently pip-compile doesn't work with VCS?
+# git+git://github.com/Bookmark-Novels/Locksmith.git@v1.0.0#egg=locksmith
+# git+git://github.com/Bookmark-Novels/Bookmark-Config.git@v1.0.4#egg=bookmark_config
+# git+git://github.com/Bookmark-Novels/Bookmark-Database.git@v1.0.5#egg=bookmark_database
+

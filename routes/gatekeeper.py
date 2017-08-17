@@ -1,17 +1,16 @@
-from datetime import datetime, timedelta
 import json
+from datetime import datetime, timedelta
 
+from bookmark_database.models.account import Account
+from bookmark_database.models.instance import Instance
+from bookmark_database.models.nonce import Nonce
+from bookmark_database.models.session import Session
 from flask import abort, jsonify, redirect, render_template, request, session, url_for
 
-from app import app, bcrypt
-from models.account import Account
-from models.instance import Instance
-from models.nonce import Nonce
-from models.session import Session
-from modules.cookie import delete_cookie, get_cookie, set_cookie
+from modules.app import app
+from modules.common import config
 from modules.logger import log
-from modules.secrets import hosts, keyring, secrets
-from modules.secure import decrypt, encrypt, get_ip
+from modules.secure import bcrypt, decrypt, encrypt, get_ip
 
 '''
 GATEKEEPER INTERACTION INTERFACE
@@ -36,23 +35,23 @@ def request_nonce():
         400: No payload provided/Invalid payload provided.
     """
     if 'payload' not in request.form:
-        log('No payload provided.')
+        log.error('No payload provided.')
         abort(400)
 
     try:
-        payload = decrypt(request.form['payload'], keyring.gatekeeper_key)
+        payload = decrypt(request.form['payload'])
     except:
-        log('Invalid payload provided: {}.'.format(request.form['payload']))
+        log.error('Invalid payload provided: {}.'.format(request.form['payload']))
         abort(400)
 
     try:
         payload = json.loads(payload)
-    except:
-        log('Supplied payload is not valid JSON: {}.'.format(payload))
+    except ValueError:
+        log.error('Supplied payload is not valid JSON: {}.'.format(payload))
         abort(400)
 
     if 'instance_id' not in payload:
-        log('Instance ID not present in payload.')
+        log.error('Instance ID not present in payload.')
         abort(400)
 
     instance_id = payload['instance_id']
@@ -61,10 +60,10 @@ def request_nonce():
         nonce = Nonce.create(instance_id)
 
         return jsonify({
-            'nonce': encrypt(nonce, keyring.gatekeeper_key)
+            'nonce': encrypt(nonce)
         })
 
-    log('Invalid instance ID provided: {}.'.format(instance_id))
+    log.error('Invalid instance ID provided: {}.'.format(instance_id))
     abort(400)
 
 @app.route('/session', methods=['POST'])
@@ -86,38 +85,38 @@ def get_session():
         abort(400)
 
     try:
-        payload = decrypt(request.form['payload'], keyring.gatekeeper_key)
+        payload = decrypt(request.form['payload'])
     except:
-        log('Invalid payload provided: {}.'.format(payload))
+        log.error('Invalid payload provided: {}.'.format(payload))
         abort(400)
 
     try:
         payload = json.loads(payload)
-    except:
-        log('Supplied payload is not valid JSON: {}.'.format(payload))
+    except ValueError:
+        log.error('Supplied payload is not valid JSON: {}.'.format(payload))
         abort(400)
 
     if 'nonce' not in payload:
-        log('No nonce provided in payload.')
+        log.error('No nonce provided in payload.')
         abort(400)
 
     if 'origin' not in payload:
-        log('No origin provided in payload.')
+        log.error('No origin provided in payload.')
         abort(400)
 
     if not Nonce.use(payload['nonce'], payload['origin']):
-        log('Invalid nonce provided: <{}, {}>.'.format(payload['nonce'], payload['origin']))
+        log.error('Invalid nonce provided: <{}, {}>.'.format(payload['nonce'], payload['origin']))
         abort(400)
 
-    if not get_cookie('gatekeeper_session'):
+    if 'gatekeeper_session' not in session:
         return jsonify({
             'session_key': None
         })
 
-    sess = Session.from_key(get_cookie('gatekeeper_session'))
+    sess = Session.from_key(session['gatekeeper_session'])
 
     if sess is None or not sess.is_active:
-        delete_cookie('gatekeeper_session')
+        del session['gatekeeper_session']
         return jsonify({
             'session_key': None
         })
@@ -126,7 +125,7 @@ def get_session():
     sess.use()
 
     return jsonify({
-        'session_key': encrypt(get_cookie('gatekeeper_session'), keyring.gatekeeper_key)
+        'session_key': encrypt(session['gatekeeper_session'])
     })
 
 '''
@@ -136,7 +135,7 @@ GATEKEEPER PAGES
 @app.route('/', methods=['GET'])
 def index():
     """You shouldn't be here. Redirect to Bookmark."""
-    return redirect("https://" + hosts.bookmark)
+    return redirect(config.get_string('config', 'hosts', 'bookmark'))
 
 @app.route('/signin', methods=['POST'])
 def signin():
@@ -153,16 +152,21 @@ def signin():
             "error": <string>
         }
     """
-    if not get_cookie('gatekeeper_session'):
+    if 'gatekeeper_session' not in session:
         if 'remove_limit_at' in session and session['remove_limit_at'] <= datetime.utcnow():
             del session['limit']
+            del session['remove_limit_at']
+
+        max_attempts = config.get_integer('config', 'max_login_attempts')
+        wait_minutes = config.get_integer('config', 'login_cooldown_minutes')
 
         if 'limit' not in session:
-            session['limit'] = secrets.max_attempts
+            session['limit'] = max_attempts
 
         if session['limit'] == 0:
+            log.warning('User failed to login more than {} times.'.format(max_attempts))
             return jsonify({
-                'error': 'You have failed to log in more than {} times. Please try again later.'.format(secrets.max_attempts)
+                'error': 'You have failed to log in more than {} times. Please try again later.'.format(max_attempts)
             })
 
         if 'email' not in request.form or 'password' not in request.form:
@@ -176,20 +180,26 @@ def signin():
             session['limit'] -= 1
 
             if session['limit'] == 0:
-                session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=secrets.wait_minutes)
+                session['remove_limit_at'] = datetime.utcnow() + timedelta(minutes=wait_minutes)
+
+            log.warning('User failed to login with email {}.'.format(request.form['email']))
 
             return jsonify({
                 'error': 'Invalid email or password specified.'
             })
 
         if not test.is_active:
+            log.warning('User attempted to login with inactive account {}.'.format(test.email))
+
             return jsonify({
                 'error': 'This account has been disabled.'
             })
 
         session_key = Session.create(test.id, get_ip())
-        set_cookie('gatekeeper_session', session_key)
-        session['limit'] = secrets.max_attempts
+        session['gatekeeper_session'] = session_key
+        session['limit'] = max_attempts
+
+        log.info('User signed in with email {}.' + request.form['email'])
 
     if 'next' in request.args:
         return jsonify({
@@ -197,7 +207,7 @@ def signin():
         })
 
     return jsonify({
-        'redirect': secrets.signin_redirect
+        'redirect': config.get_string('config', 'signin_redirect')
     })
 
 @app.route('/signup', methods=['POST'])
@@ -216,7 +226,7 @@ def signup():
             "error": <string>
         }
     """
-    if not get_cookie('gatekeeper_session'):
+    if 'gatekeeper_session' not in session:
         if 'name' not in request.form or 'email' not in request.form or 'password' not in request.form:
             return jsonify({
                 'error': 'Name, email or password not specified.'
@@ -226,12 +236,14 @@ def signup():
 
         if test is not None:
             return jsonify({
-                'error': 'An account with the password {} already exists.'.format(request.form['email'])
+                'error': 'An account with the email {} already exists.'.format(request.form['email'])
             })
 
         acc_id = Account.create(request.form['name'], request.form['email'], bcrypt.generate_password_hash(request.form['password']))
         session_key = Session.create(acc_id, get_ip())
-        set_cookie('gatekeeper_session', session_key)
+        session['gatekeeper_session'] = session_key
+
+        log.info('User signed up in with email {}.' + request.form['email'])
 
     if 'next' in request.args:
         return jsonify({
@@ -239,7 +251,7 @@ def signup():
         })
 
     return jsonify({
-        'redirect': secrets.signin_redirect
+        'redirect': config.get_string('signin_redirect')
     })
 
 @app.route('/forgot-password', methods=['POST'])
@@ -249,19 +261,23 @@ def forgot_password():
 @app.route('/signout', methods=['GET'])
 def signout():
     """Signs a user out. Deletes the user's `gatekeeper_session` cookie and invalidates the session server-side."""
-    if not get_cookie('gatekeeper_session'):
+    if 'gatekeeper_session' not in session:
         return redirect(url_for('signin'))
 
-    session_key = get_cookie('gatekeeper_session')
-    Session.from_key(session_key).invalidate()
-    delete_cookie('gatekeeper_session')
+    log.info('User signed out with session key {}.'.format(session['gatekeeper_session']))
+    Session.from_key(session['gatekeeper_session']).invalidate()
+    del session['gatekeeper_session']
 
     return redirect(url_for('signin'))
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    return '', 200
 
 @app.route('/<path>', methods=['GET'])
 def route_to_react(path):
     """Wildcard to send everything to React."""
-    if get_cookie('gatekeeper_session'):
-        return redirect(secrets.signin_redirect)
+    if 'gatekeeper_session' in session:
+        return redirect(config.get_string('config', 'signin_redirect'))
 
     return render_template('template.html')
