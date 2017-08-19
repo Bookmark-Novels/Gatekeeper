@@ -13,6 +13,7 @@ __all__ = ['APP_PATH', 'INSTANCE_NAME', 'INSTANCE_ID', 'config', 'redis_store']
 
 APP_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 CONSUL_TOKEN = os.environ['CONSUL_TOKEN']
+
 INSTANCE_ID = str(uuid.uuid4())
 INSTANCE_NAME = 'gatekeeper-{}'.format(INSTANCE_ID)
 
