@@ -1,4 +1,4 @@
-import fetch from 'whatwg-fetch'
+import 'whatwg-fetch'
 import React from 'react'
 import Helmet from 'react-helmet'
 import {Input, WorkButton} from './form.js'
@@ -93,7 +93,7 @@ export class SignInForm extends React.Component {
         <aside id='gatekeeper-modal'>
           <form method='POST' id='gatekeeper-form' onSubmit={this.handleSubmit.bind(this)} ref={(c) => { this.signin_form = c }}>
             <header>
-              <h1>Sign in to Bookmark</h1>
+              <h1>Sign In to Bookmark</h1>
             </header>
             {email}
             {password}

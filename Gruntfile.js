@@ -9,8 +9,9 @@ module.exports = function (grunt) {
       app: {
         options: {
           globals: [
-            "gatekeeper",
-            "FormData"
+            'gatekeeper',
+            'FormData',
+            'fetch'
           ],
           fix: true
         },

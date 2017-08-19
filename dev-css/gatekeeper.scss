@@ -111,6 +111,10 @@ button.btn-primary {
     }
 }
 
+.small-width {
+    display: none;
+}
+
 #gatekeeper-top-bar {
     background: #fff;
     display: flex;
@@ -142,7 +146,7 @@ button.btn-primary {
     padding: 3rem;
     border-radius: 3px;
 
-    h1 {
+    h1, h2 {
         margin-top: 0;
     }
 }
@@ -247,3 +251,57 @@ button.btn-primary {
         color: #fff;
     }
 }
+
+@media (max-width: 576px) {
+    .full-width {
+        display: none;
+    }
+
+    .small-width {
+        display: inline-block;
+    }
+
+    #gatekeeper-top-bar a {
+        span.fa {
+            display: none;
+        }
+    }
+
+    #gatekeeper-modal-wrapper {
+        margin: 1rem auto 0;
+    }
+
+    #gatekeeper-modal {
+        padding: 1.5rem 1rem;
+    }
+
+    .gatekeeper-form-input-group {
+        flex-flow: column;
+        margin-bottom: 1rem;
+
+        label {
+            text-align: left;
+            padding: 0 0 1rem;
+        }
+    }
+
+    #gatekeeper-form-bottom {
+        flex-flow: column;
+
+        #bookmark-registration-agreement {
+            text-align: left;
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+/*
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+*/

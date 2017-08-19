@@ -6,7 +6,12 @@ export class NavBar extends React.Component {
       <nav>
         <span id='bookmark-logo'>
           <a href={`${gatekeeper.bookmark_host}`}>
-            Bookmark Novels
+            <span className='full-width'>
+              Bookmark Novels
+            </span>
+            <span className='small-width'>
+              BN
+            </span>
           </a>
         </span>
         <a href={`${gatekeeper.sitemap.signin}`}>

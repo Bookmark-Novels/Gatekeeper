@@ -1,4 +1,4 @@
-import fetch from 'whatwg-fetch'
+import 'whatwg-fetch'
 import React from 'react'
 import Helmet from 'react-helmet'
 import {Input, WorkButton} from './form.js'
@@ -101,7 +101,8 @@ export class RegisterForm extends React.Component {
         <aside id='gatekeeper-modal'>
           <form method='POST' id='gatekeeper-form' onSubmit={this.handleSubmit.bind(this)} ref={(c) => { this.register_form = c }}>
             <header>
-              <h1>Create a Bookmark Account</h1>
+              <h1 className='full-width'>Create a Bookmark Account</h1>
+              <h2 className='small-width'>Create a Bookmark Account</h2>
             </header>
             <input type='hidden' name='csrf_token' value='{{ csrf_token() }}' />
             {name}
