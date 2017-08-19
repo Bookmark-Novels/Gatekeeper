@@ -12,13 +12,15 @@ from locksmith import Locksmith
 __all__ = ['APP_PATH', 'INSTANCE_NAME', 'INSTANCE_ID', 'config', 'redis_store']
 
 APP_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+CONSUL_TOKEN = os.environ['CONSUL_TOKEN']
+
 INSTANCE_ID = str(uuid.uuid4())
 INSTANCE_NAME = 'gatekeeper-{}'.format(INSTANCE_ID)
 
-_consul_host = 'gatekeeper.consul.dev.bookmark.services'
+_consul_host = 'access.consul.dev.bookmark.services'
 
 if os.environ.get('ENV_StAGE') == 'PROD':
-    _consul_host = 'gatekeeper.consul.bookmark.services'
+    _consul_host = 'access.consul.bookmark.services'
 
 _overrides = None
 _override_path = os.path.join(APP_PATH, 'conf', 'overrides.json')
@@ -26,7 +28,7 @@ _override_path = os.path.join(APP_PATH, 'conf', 'overrides.json')
 if os.path.isfile(_override_path):
     _overrides = _override_path
 
-config = Config('gatekeeper.consul.dev.bookmark.services', 'gatekeeper', _overrides)
+config = Config(_consul_host, CONSUL_TOKEN, root_key='gatekeeper', override_file=_overrides)
 
 locksmith = Locksmith(config.get_string('config', 'vault_token'), config.get_string('config', 'hosts', 'vault'))
 _db_user, _db_password = locksmith.get_credentials('bookmark')
