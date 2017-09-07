@@ -22,4 +22,4 @@ Merged branches will be deleted every 2-3 days after merging.
 
 ## Getting Started
 
-See [this page](https://wiki.dev.bookmark.services/development/gatekeeper/dev-setup-old).
+See [this page](https://wiki.dev.bookmark.services/development/gatekeeper/developer-setup-guide).
