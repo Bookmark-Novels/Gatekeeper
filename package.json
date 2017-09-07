@@ -34,9 +34,7 @@
     "standard": "^10.0.3"
   },
   "scripts": {
-    "test": "python gatekeeper.py",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "test": "python gatekeeper.py"
   },
   "repository": {
     "type": "git",
