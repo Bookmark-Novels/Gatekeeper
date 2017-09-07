@@ -1,10 +1,10 @@
-import fetch from 'whatwg-fetch'
+import 'whatwg-fetch'
 import React from 'react'
 import Helmet from 'react-helmet'
-import {Input, WorkButton} from './form.js'
-import {Alert, Alerts} from './alerts.js'
+import {Input, WorkButton} from './form.jsx'
+import {Alert, Alerts} from './alerts.jsx'
 
-export class SignInForm extends React.Component {
+export class RegisterForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -16,9 +16,9 @@ export class SignInForm extends React.Component {
   handleSubmit (e) {
     e.preventDefault()
 
-    var that = this
-        // Probably a bad idea to name it this but oh well...
-    var alert = function (a) {
+    let that = this
+    // Probably a bad idea to name it this but oh well...
+    let alert = function (a) {
       that.setState({
         alerts: [a]
       })
@@ -28,9 +28,9 @@ export class SignInForm extends React.Component {
       working: true
     })
 
-    var payload = new FormData(this.signin_form)
+    let payload = new FormData(this.register_form)
 
-    fetch(gatekeeper.ep.signin, {
+    fetch(gatekeeper.ep.register, {
       method: 'POST',
       headers: {
         'X-CSRFToken': gatekeeper.csrf_token
@@ -64,6 +64,14 @@ export class SignInForm extends React.Component {
   }
 
   render () {
+    let name = React.createElement(Input, {
+      label: 'Display Name',
+      type: 'text',
+      name: 'name',
+      placeholder: 'Your Name Here',
+      required: true
+    })
+
     let email = React.createElement(Input, {
       label: 'Email Address',
       type: 'email',
@@ -86,37 +94,29 @@ export class SignInForm extends React.Component {
 
     return (
       <div>
-        <Helmet title='Bookmark Sign In' />
+        <Helmet title='Bookmark Sign Up' />
         <Alerts>
           {alerts}
         </Alerts>
         <aside id='gatekeeper-modal'>
-          <form method='POST' id='gatekeeper-form' onSubmit={this.handleSubmit.bind(this)} ref={(c) => { this.signin_form = c }}>
+          <form method='POST' id='gatekeeper-form' onSubmit={this.handleSubmit.bind(this)} ref={(c) => { this.register_form = c }}>
             <header>
-              <h1>Sign in to Bookmark</h1>
+              <h1 className='full-width'>Create a Bookmark Account</h1>
+              <h2 className='small-width'>Create a Bookmark Account</h2>
             </header>
+            <input type='hidden' name='csrf_token' value='{{ csrf_token() }}' />
+            {name}
             {email}
             {password}
             <div id='gatekeeper-form-bottom'>
-              <div id='gatekeeper-form-links' className='vertical-align'>
+              <div id='bookmark-registration-agreement' className='small vertical-align'>
                 <span>
-                  <a href={`${gatekeeper.sitemap.register}`}>Create Account</a>
-                  <span className='gray'> / </span>
-                  <a href={`${gatekeeper.sitemap.forgot_password}`}>Forgot Password</a>
+                    By clicking "Create Account", I am willingly acknowledging and accepting the Bookmark <a href={`${gatekeeper.bookmark_host}/tos`}>terms&nbsp;of&nbsp;service</a> and <a href={`${gatekeeper.bookmark_host}/privacy`}>privacy&nbsp;policy</a>.
                 </span>
               </div>
               <div id='gatekeeper-form-buttons' className='vertical-align'>
-                {
-                    /*
-                    <span>
-                        <input type="checkbox" name="remember" id="remember" />
-                        &nbsp;
-                        <label htmlFor="remember">Remember Me</label>
-                    </span>
-                    */
-                }
-                <WorkButton className='btn-primary' type='submit' name='login' working={this.state.working} >
-                  Sign In
+                <WorkButton className='btn-primary' type='submit' name='register' working={this.state.working} >
+                    Create&nbsp;Account
                 </WorkButton>
               </div>
             </div>

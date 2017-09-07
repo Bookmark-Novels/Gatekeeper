@@ -239,7 +239,7 @@ def signup():
         session_key = Session.create(acc_id, get_ip())
         session['gatekeeper_session'] = session_key
 
-        log.info('User signed up in with email {}.' + request.form['email'])
+        log.info('User signed up with email {}.'.format(request.form['email']))
 
     if 'next' in request.args:
         return jsonify({
