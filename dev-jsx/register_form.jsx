@@ -16,9 +16,9 @@ export class RegisterForm extends React.Component {
   handleSubmit (e) {
     e.preventDefault()
 
-    var that = this
+    let that = this
     // Probably a bad idea to name it this but oh well...
-    var alert = function (a) {
+    let alert = function (a) {
       that.setState({
         alerts: [a]
       })
@@ -28,7 +28,7 @@ export class RegisterForm extends React.Component {
       working: true
     })
 
-    var payload = new FormData(this.register_form)
+    let payload = new FormData(this.register_form)
 
     fetch(gatekeeper.ep.register, {
       method: 'POST',
