@@ -16,19 +16,19 @@ module.exports = function (grunt) {
           fix: true
         },
         src: [
-          'dev-jsx/*.js'
+          'dev-jsx/*.jsx'
         ]
       }
     },
     uglify: {
       everything: {
         files: {
-          'static/js/gatekeeper.min.js': ['staging/js/jsx.js', 'dev-js/gatekeeper.js']
+          'static/js/gatekeeper.min.js': ['staging/js/jsx.js', 'dev-js/gatekeeper.jsx']
         }
       },
       dev: {
         files: {
-          'static/js/gatekeeper.min.js': ['staging/js/jsx.js', 'dev-js/gatekeeper.js']
+          'static/js/gatekeeper.min.js': ['staging/js/jsx.js', 'dev-js/gatekeeper.jsx']
         },
         options: {
           mangle: false,
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
           watch: true,
           keepAlive: true
         },
-        src: ['dev-jsx/gatekeeper.js'],
+        src: ['dev-jsx/gatekeeper.jsx'],
         dest: 'staging/js/jsx.js'
       }
     },
@@ -66,7 +66,7 @@ module.exports = function (grunt) {
         tasks: ['sass']
       },
       js: {
-        files: ['dev-js/**/*.js', 'staging/js/*.js'],
+        files: ['dev-js/**/*.jsx', 'staging/js/*.js'],
         tasks: ['standard', 'uglify:dev']
       }
     }

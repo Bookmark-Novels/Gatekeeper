@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Router, Route, browserHistory} from 'react-router'
-import {SignInForm} from './signin_form.js'
-import {RegisterForm} from './register_form.js'
-import {PageNotFound} from './page_not_found.js'
-import {NavBar} from './navbar.js'
+import {SignInForm} from './signin_form.jsx'
+import {RegisterForm} from './register_form.jsx'
+import {PageNotFound} from './page_not_found.jsx'
+import {NavBar} from './navbar.jsx'
 
 // import { ForgotPasswordForm } from './forgot_password.js';
 
