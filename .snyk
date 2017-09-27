@@ -20,3 +20,8 @@ patch:
         patched: '2017-08-15T22:04:14.898Z'
     - grunt-contrib-watch > tiny-lr > body-parser > debug > ms:
         patched: '2017-08-15T22:04:14.898Z'
+  'npm:debug:20170905':
+    - grunt-contrib-watch > tiny-lr > debug:
+        patched: '2017-09-27T06:29:05.441Z'
+    - grunt-contrib-watch > tiny-lr > body-parser > debug:
+        patched: '2017-09-27T06:29:05.441Z'
