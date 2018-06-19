@@ -9,7 +9,7 @@
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-sass": "^1.2.1",
-    "snyk": "^1.38.2"
+    "snyk": "^1.83.0"
   },
   "devDependencies": {
     "grunt": "^1.0.1"
@@ -17,7 +17,8 @@
   "scripts": {
     "test": "python gatekeeper.py",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepublish": "npm run snyk-protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
