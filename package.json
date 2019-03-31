@@ -4,7 +4,7 @@
   "description": "Bookmark's authentication and SSO service.",
   "main": "gatekeeper.py",
   "dependencies": {
-    "grunt-contrib-cssmin": "^1.0.2",
+    "grunt-contrib-cssmin": "^2.2.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-contrib-uglify": "^2.0.0",
